@@ -34,9 +34,9 @@ typedef enum forward_orientation {
 /* this sets the motor to either move forward or backwards linearly
  * from its current position */
 typedef enum travel_direction {
-	BRAKE,
-	FORWARD,
-	REVERSE
+	REVERSE=-1,
+	BRAKE=0,
+	FORWARD=1
 }travel;
 
 class da_motor {

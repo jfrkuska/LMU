@@ -40,7 +40,7 @@ da_lmu chassis(motors);
 /* modbus slave registers */
 enum {        
   MB_MTR_TARGET,     /* motor index to apply common settings to */
-  MB_MTR_DIR,        /* BRAKE=0, FORWARD=1, REVERSE=2 */
+  MB_MTR_DIR,        /* BRAKE=0, FORWARD=1, REVERSE=-1 */
   MB_MTR_THROTTLE,   /* 0x00 - 0xFF */
   MB_REGS	     /* total number of registers on slave */
 };
