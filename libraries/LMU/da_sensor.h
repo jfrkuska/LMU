@@ -19,12 +19,15 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifndef da_sensor_h
+#define da_sensor_h
+
 /******************************************************************************
  * Includes
  ******************************************************************************/
  #include "da_types.h"
  
- typedef t_sample uint;
+ typedef uint t_sample;
  
 /******************************************************************************
  * Classes
@@ -37,10 +40,12 @@ private:
 	t_sample *sample_list;
     static uchar tot_num_sensors;	/* total motors derived from class */
 public:
-	da_sensor(&da_sensor, uint maxrate, uint samplebits): 
+	da_sensor(uint maxrate = 0, uint samplebits = 0): 
 	samplerate_max(maxrate), sample_bits(samplebits) { tot_num_sensors++; }
 
 	virtual uchar Connect(void) = 0;
 	virtual uchar Disconnect(void) = 0;
 	virtual t_sample* Sample(void) = 0;
 };
+
+#endif

@@ -18,19 +18,33 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef da_lmu_h
+#define da_lmu_h
 
 /******************************************************************************
  * Includes
  ******************************************************************************/
  #include "da_types.h"
  #include "da_motor.h"
-
+ #include "da_sensor.h"
+ #include "da_switch.h"
+ 
+/******************************************************************************
+ * Classes
+ ******************************************************************************/
 class da_lmu {
 private:
   class da_motor *motors;
+  class da_sensor *sensors;
+  class da_switch *switches;
   unsigned int operation_time_s;	/* time in operation in seconds */
 public:
-  da_lmu(class da_motor *motors): 
-  motors(motors) {}
-  class da_motor* motor(uchar mtr_num) { return &motors[mtr_num]; }
+  da_lmu(class da_motor *mtrs, class da_sensor *snsrs = 0, class da_switch *swtchs = 0): 
+  motors(mtrs), sensors(snsrs), switches(swtchs) {}
+  
+  class da_motor* get_motor(uchar motor_num);
+  class da_sensor* get_sensor(uchar sensor_num);
+  class da_switch* get_switch(uchar switch_num);
 };
+
+#endif

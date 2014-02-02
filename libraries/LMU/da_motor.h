@@ -19,6 +19,9 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifndef da_motor_h
+#define da_motor_h
+
 /******************************************************************************
  * Includes
  ******************************************************************************/
@@ -28,41 +31,44 @@
  * Typedefs
  ******************************************************************************/
 /* 
-* Name: enum forward_orientation
+* Name: enum forward_rotation
 * This sets the way the motor turns in order to progress linearly forward */
-typedef enum forward_orientation {
-	CW,
-	CCW
-}orientation;
+enum forward_rotation {
+	MTR_CW,
+	MTR_CCW
+};
 
-/* this sets the motor to either move forward or backwards linearly
+/* Name: enum travel_direction
+ * this sets the motor to either move forward or backwards linearly
  * from its current position */
-typedef enum travel_direction {
-	BRAKE,
-	FORWARD,
-	REVERSE
-}travel;
+enum travel_direction {
+	MTR_BRAKE,
+	MTR_FORWARD,
+	MTR_REVERSE
+};
 
 /******************************************************************************
  * Classes
  ******************************************************************************/
 class da_motor {
 private:
-  orientation forward;			/* cw or ccw */
-  travel direction;				/* present rotation direction */
-  uchar throttle_present;       /* present motor throttle */
-  uchar throttle_max;			/* max motor throttle count */
-  static uchar tot_num_motors;	/* total motors derived from class */
-  uchar set_orientation(orientation rotation) { forward = rotation; }
+  enum forward_rotation rotation;						/* cw or ccw */
+  enum travel_direction direction;						/* present rotation direction */
+  uchar throttle_present;       						/* present motor throttle */
+  uchar throttle_max;									/* max motor throttle count */
+  static uchar tot_num_motors;							/* total motors derived from class */
+  uchar set_orientation(enum forward_rotation rot) { rotation = rot; }
 public:
-  da_motor(orientation fwd, uchar tmax): 
-  forward(fwd), throttle_max(tmax) { tot_num_motors++; }
-  virtual int setThrottle(uchar, travel) = 0;
+  da_motor(enum forward_rotation rot, uchar tmax): 
+  rotation(rot), throttle_max(tmax) { tot_num_motors++; }
+  virtual int setThrottle(uchar, enum travel_direction) = 0;
 
   uchar set_throttle(int value) { throttle_present = value & 0xFF; }
   uchar get_throttle(void) { return throttle_present; }
-  orientation get_orientation(void) { return forward; }
-  travel get_direction(void) { return direction; }
-  void set_direction(travel new_dir) { direction = new_dir; }
+  enum forward_rotation get_orientation(void) { return rotation; }
+  enum travel_direction get_direction(void) { return direction; }
+  void set_direction(enum travel_direction new_dir) { direction = new_dir; }
   static uchar get_mtr_cnt(void) { return tot_num_motors; }
  };
+ 
+#endif

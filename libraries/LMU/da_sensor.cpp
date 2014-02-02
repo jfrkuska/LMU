@@ -19,10 +19,10 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef da_types_h
-#define da_types_h
+/******************************************************************************
+ * Includes
+ ******************************************************************************/
 
-typedef unsigned char 	uchar;
-typedef unsigned int 	uint;
+#include "da_sensor.h"
 
-#endif
+uchar da_sensor::tot_num_sensors = 0;

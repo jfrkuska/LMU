@@ -19,10 +19,34 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef da_types_h
-#define da_types_h
+#ifndef da_switch_h
+#define da_switch_h
 
-typedef unsigned char 	uchar;
-typedef unsigned int 	uint;
+/******************************************************************************
+ * Includes
+ ******************************************************************************/
+#include "Arduino.h"
+#include "da_types.h"
+ 
+enum switch_state {
+	SW_OFF = 0,
+	SW_ON = 1
+};
+ 
+/******************************************************************************
+ * Classes
+ ******************************************************************************/
+class da_switch {
+private:
+	uchar on_state;
+    static uchar tot_num_switches;	/* total switches derived from class */
+public:
+	da_switch(uint on_state = SW_ON): 
+	on_state(on_state) { tot_num_switches++; }
+
+	virtual void On(void) = 0;
+	virtual void Off(void) = 0;
+	virtual enum switch_state State(void) = 0;
+};
 
 #endif

@@ -22,13 +22,13 @@
 /******************************************************************************
  * Includes
  ******************************************************************************/
-#include "da_lmu.h"
+
 #include "da_dc_motor.h"
 
 /* set dc mtr throttle */
-int da_dc_motor::setThrottle(uchar amount, travel dir)
+int da_dc_motor::setThrottle(uchar amount, enum travel_direction dir)
 {
-    orientation forward = get_orientation();
+    enum forward_rotation forward = get_orientation();
     
     if ((get_throttle() == amount) && (get_direction() == dir))
 		return 0;
@@ -36,14 +36,14 @@ int da_dc_motor::setThrottle(uchar amount, travel dir)
     digitalWrite(pin0, LOW);
     digitalWrite(pin1, LOW);
     
-    if (dir == BRAKE) {}
-    else if (dir == FORWARD) {
-        if (forward == CW)
+    if (dir == MTR_BRAKE) {}
+    else if (dir == MTR_FORWARD) {
+        if (forward == MTR_CW)
 			digitalWrite(pin0, HIGH);
         else 
 			digitalWrite(pin1, HIGH);
-    } else if (dir == REVERSE) {
-        if (forward == CW)
+    } else if (dir == MTR_REVERSE) {
+        if (forward == MTR_CW)
           digitalWrite(pin1, HIGH);
         else
           digitalWrite(pin0, HIGH); 

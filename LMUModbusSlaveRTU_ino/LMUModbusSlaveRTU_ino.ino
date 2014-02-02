@@ -17,7 +17,9 @@
 */
 
 #include <da_lmu.h>
+#include <da_dc_motor.h>
 #include <ModbusSlave.h>
+#include <MemoryFree.h>
 
 /* L298N Motor Driver Pins */
 #define M0_EN_PIN 10
@@ -26,22 +28,29 @@
 #define M1_EN_PIN 9
 #define M1_P0_PIN 8
 #define M1_P1_PIN 11
+
+/* Modbus slave configuration parameters */
+#define MB_SLAVE     1
+#define MB_BAUD      115200
+#define MB_PARITY    'e'
+#define MB_TXENPIN   0
   
 /* create a modbus slave instance */
 ModbusSlave mbs;
 /* create our chassis with 2 motors */
-uchar da_motor::tot_num_mtrs = 0;
-da_dc_brushed motors[] = {
-  da_dc_brushed(CW,255, M0_EN_PIN, M0_P0_PIN, M0_P1_PIN),
-  da_dc_brushed(CW,255, M1_EN_PIN, M1_P0_PIN, M1_P1_PIN)
+da_dc_motor motors[] = {
+  da_dc_motor(MTR_CW, 255, M0_EN_PIN, M0_P0_PIN, M0_P1_PIN),
+  da_dc_motor(MTR_CW, 255, M1_EN_PIN, M1_P0_PIN, M1_P1_PIN)
 };
 da_lmu chassis(motors);
 
 /* modbus slave registers */
 enum {        
-  MB_MTR_TARGET,     /* motor index to apply common settings to */
-  MB_MTR_DIR,        /* BRAKE=0, FORWARD=1, REVERSE=2 */
+  MB_MTR_TARGET,     /* motor index to set */
+  MB_MTR_DIR,        /* BRAKE, FORWARD, REVERSE */
   MB_MTR_THROTTLE,   /* 0x00 - 0xFF */
+  MB_SW_IDX,         /* switch index to set */
+  MB_SW_STATE,       /* switch state */
   MB_REGS	     /* total number of registers on slave */
 };
 
@@ -52,14 +61,11 @@ unsigned long tprev = 0;        /* previous time*/
 
 void setup() 
 {
-  /* Modbus slave configuration parameters */
-  const unsigned char SLAVE = 1;
-  const long BAUD = 115200;
-  const char PARITY = 'e';
-  const char TXENPIN = 0;
-
   /* MBS: configure */
-  mbs.configure(SLAVE,BAUD,PARITY,TXENPIN);
+  mbs.configure(MB_SLAVE, MB_BAUD, MB_PARITY, MB_TXENPIN);
+  
+  Serial.print("freeMemory()=");
+  Serial.println(freeMemory());
 }
 
 void loop()
@@ -74,6 +80,6 @@ void loop()
 
   /* update motor throttle */
   if (regs[MB_MTR_TARGET] < da_motor::get_mtr_cnt())
-    motors[regs[MB_MTR_TARGET]].setThrottle(regs[MB_MTR_THROTTLE], (travel)regs[MB_MTR_DIR]);
+    motors[regs[MB_MTR_TARGET]].setThrottle(regs[MB_MTR_THROTTLE], (enum travel_direction)regs[MB_MTR_DIR]);
 }
 

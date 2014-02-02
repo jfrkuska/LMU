@@ -19,11 +19,15 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifndef da_dc_motor_h
+#define da_dc_motor_h
+
 /******************************************************************************
  * Includes
  ******************************************************************************/
- #include "da_types.h"
- #include "da_motor.h"
+#include "Arduino.h"
+#include "da_types.h"
+#include "da_motor.h"
 
 class da_dc_motor: public da_motor {
 private:
@@ -31,15 +35,16 @@ private:
 	uchar pin0;
 	uchar pin1;
 public:
-	da_dc_motor(orientation rot,
+	da_dc_motor(enum forward_rotation rot,
 		uchar tmax,
 		uchar en, 
 		uchar p0, 
-		uchar p1): da_motor(rot,tmax), enable_pin(en), pin0(p0), pin1(p1) {
+		uchar p1): da_motor(rot, tmax), enable_pin(en), pin0(p0), pin1(p1) {
 			pinMode(enable_pin, OUTPUT);
 			pinMode(pin0, OUTPUT);
 			pinMode(pin1, OUTPUT);
 		}
-	int setThrottle(uchar, travel);
+	int setThrottle(uchar, enum travel_direction);
 };
-  
+
+#endif
