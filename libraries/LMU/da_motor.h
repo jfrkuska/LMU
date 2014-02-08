@@ -55,20 +55,19 @@ private:
   enum forward_rotation rotation;						/* cw or ccw */
   enum travel_direction direction;						/* present rotation direction */
   uchar throttle_present;       						/* present motor throttle */
-  uchar throttle_max;									/* max motor throttle count */
+  uint throttle_max;									/* max motor throttle count */
   static uchar tot_num_motors;							/* total motors derived from class */
-  uchar set_orientation(enum forward_rotation rot) { rotation = rot; }
+  uchar setForwardRotation(enum forward_rotation rot) { rotation = rot; }
 public:
   da_motor(enum forward_rotation rot, uchar tmax): 
   rotation(rot), throttle_max(tmax) { tot_num_motors++; }
-  virtual int setThrottle(uchar, enum travel_direction) = 0;
-
-  uchar set_throttle(int value) { throttle_present = value & 0xFF; }
-  uchar get_throttle(void) { return throttle_present; }
-  enum forward_rotation get_orientation(void) { return rotation; }
-  enum travel_direction get_direction(void) { return direction; }
-  void set_direction(enum travel_direction new_dir) { direction = new_dir; }
-  static uchar get_mtr_cnt(void) { return tot_num_motors; }
+  virtual int setVector(uchar, enum travel_direction) = 0;
+  uchar setThrottle(int value) { throttle_present = value & 0xFF; }
+  uchar getThrottle(void) { return throttle_present; }
+  enum forward_rotation getForwardRotation(void) { return rotation; }
+  enum travel_direction getDirection(void) { return direction; }
+  void setDirection(enum travel_direction new_dir) { direction = new_dir; }
+  static uchar getMtrCnt(void) { return tot_num_motors; }
  };
  
 #endif

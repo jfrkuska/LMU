@@ -18,8 +18,11 @@
 
 #include <da_lmu.h>
 #include <da_dc_motor.h>
+#include <da_direct_switch.h>
 #include <ModbusSlave.h>
 #include <MemoryFree.h>
+
+#define TIMEOUT 5000
 
 /* L298N Motor Driver Pins */
 #define M0_EN_PIN 10
@@ -28,6 +31,9 @@
 #define M1_EN_PIN 9
 #define M1_P0_PIN 8
 #define M1_P1_PIN 11
+
+/* Switches Pins */
+#define SW_LED_PIN 13
 
 /* Modbus slave configuration parameters */
 #define MB_SLAVE     1
@@ -42,7 +48,12 @@ da_dc_motor motors[] = {
   da_dc_motor(MTR_CW, 255, M0_EN_PIN, M0_P0_PIN, M0_P1_PIN),
   da_dc_motor(MTR_CW, 255, M1_EN_PIN, M1_P0_PIN, M1_P1_PIN)
 };
-da_lmu chassis(motors);
+
+da_direct_switch switches[] = {
+  da_direct_switch(SW_LED_PIN, SW_ON, LOW)
+};
+
+da_lmu chassis(motors, 0, switches);
 
 /* modbus slave registers */
 enum {        
@@ -74,12 +85,14 @@ void loop()
   if(mbs.update(regs, MB_REGS))
     wdog = millis();
 
-  if ((millis() - wdog) > 5000)  { /* if no comm in 5 sec */
+  if ((millis() - wdog) > TIMEOUT)  { /* if no comm in TIMEOUT msec */
     /* handle timeout */
+    /* halt motors */
+    /* turn off switches */
   }        
 
   /* update motor throttle */
-  if (regs[MB_MTR_TARGET] < da_motor::get_mtr_cnt())
-    motors[regs[MB_MTR_TARGET]].setThrottle(regs[MB_MTR_THROTTLE], (enum travel_direction)regs[MB_MTR_DIR]);
+  if ((regs[MB_MTR_TARGET] < da_motor::getMtrCnt()) && (regs[MB_MTR_THROTTLE] != motors[regs[MB_MTR_TARGET]].getThrottle()))
+    motors[regs[MB_MTR_TARGET]].setVector(regs[MB_MTR_THROTTLE], (enum travel_direction)regs[MB_MTR_DIR]);
 }
 

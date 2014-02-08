@@ -44,7 +44,7 @@ public:
 			pinMode(pin0, OUTPUT);
 			pinMode(pin1, OUTPUT);
 		}
-	int setThrottle(uchar, enum travel_direction);
+	int setVector(uchar, enum travel_direction);
 };
 
 #endif

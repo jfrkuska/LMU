@@ -41,12 +41,12 @@ private:
 	uchar on_state;
     static uchar tot_num_switches;	/* total switches derived from class */
 public:
-	da_switch(uint on_state = SW_ON): 
-	on_state(on_state) { tot_num_switches++; }
-
-	virtual void On(void) = 0;
-	virtual void Off(void) = 0;
-	virtual enum switch_state State(void) = 0;
+	da_switch(uchar on_state = SW_ON): on_state(on_state) { tot_num_switches++; }
+	uchar getOnState(void) { return on_state; }
+	
+	virtual void on(void) = 0;
+	virtual void off(void) = 0;
+	virtual enum switch_state getState(void) = 0;
 };
 
 #endif
