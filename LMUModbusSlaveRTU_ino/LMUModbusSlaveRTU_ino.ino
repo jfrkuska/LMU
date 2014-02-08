@@ -18,7 +18,7 @@
 
 #include <da_lmu.h>
 #include <da_dc_motor.h>
-#include <da_direct_switch.h>
+//#include <da_direct_switch.h>
 #include <ModbusSlave.h>
 #include <MemoryFree.h>
 
@@ -49,19 +49,22 @@ da_dc_motor motors[] = {
   da_dc_motor(MTR_CW, 255, M1_EN_PIN, M1_P0_PIN, M1_P1_PIN)
 };
 
-da_direct_switch switches[] = {
-  da_direct_switch(SW_LED_PIN, SW_ON, LOW)
-};
+//da_direct_switch switches[] = {
+//  da_direct_switch(SW_LED_PIN, SW_ON, LOW)
+//};
 
 da_lmu chassis(motors, 0, switches);
 
 /* modbus slave registers */
 enum {        
-  MB_MTR_TARGET,     /* motor index to set */
+  MB_MTR_IDX,        /* motor index to set */
   MB_MTR_DIR,        /* BRAKE, FORWARD, REVERSE */
   MB_MTR_THROTTLE,   /* 0x00 - 0xFF */
   MB_SW_IDX,         /* switch index to set */
   MB_SW_STATE,       /* switch state */
+  MB_SENSR_IDX,      /* sensor index to set */
+  MB_SENSR_CFG,      /* sensor config */
+  MB_SENSR_VAL,      /* sensor value */
   MB_REGS	     /* total number of registers on slave */
 };
 

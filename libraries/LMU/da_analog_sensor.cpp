@@ -19,34 +19,19 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef da_sensor_h
-#define da_sensor_h
-
 /******************************************************************************
  * Includes
  ******************************************************************************/
- #include "da_types.h"
- 
-/******************************************************************************
- * Classes
- ******************************************************************************/
-template <typename T>
-class da_sensor {
-private:
-	vector<T> samples; 
-    uint max_samples;
-	uint max_rate; /* samples per second */
-	static uchar tot_num_sensors;	/* total motors derived from class */
-public:
-	da_sensor(uint maxrate = 1, maxsamples = 10): 
-	max_samples(maxsamples), max_rate(maxrate) { 
-		tot_num_sensors++; 
-	}
 
-	virtual uchar Connect(void) = 0;
-	virtual uchar Disconnect(void) = 0;
-	virtual t_sample* Sample(void) = 0;
-	virtual uchar Calibrate(void) = 0;
-};
+#include "da_analog_sensor.h"
 
-#endif
+uchar da_analog_sensor::Connect(void) {
+	return 0;
+}
+uchar da_analog_sensor::Disconnect(void) {
+	return 0;
+}
+
+t_sample da_analog_sensor::Sample(void) {
+	return 0;
+}
