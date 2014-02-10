@@ -18,7 +18,7 @@
 
 #include <da_lmu.h>
 #include <da_dc_motor.h>
-//#include <da_direct_switch.h>
+#include <da_direct_switch.h>
 #include <ModbusSlave.h>
 #include <MemoryFree.h>
 
@@ -49,9 +49,9 @@ da_dc_motor motors[] = {
   da_dc_motor(MTR_CW, 255, M1_EN_PIN, M1_P0_PIN, M1_P1_PIN)
 };
 
-//da_direct_switch switches[] = {
-//  da_direct_switch(SW_LED_PIN, SW_ON, LOW)
-//};
+da_direct_switch switches[] = {
+  da_direct_switch(SW_LED_PIN, SW_ON)
+};
 
 da_lmu chassis(motors, 0, switches);
 
@@ -63,7 +63,7 @@ enum {
   MB_SW_IDX,         /* switch index to set */
   MB_SW_STATE,       /* switch state */
   MB_SENSR_IDX,      /* sensor index to set */
-  MB_SENSR_CFG,      /* sensor config */
+  MB_SENSR_REG,      /* sensor setting */
   MB_SENSR_VAL,      /* sensor value */
   MB_REGS	     /* total number of registers on slave */
 };
@@ -95,7 +95,14 @@ void loop()
   }        
 
   /* update motor throttle */
-  if ((regs[MB_MTR_TARGET] < da_motor::getMtrCnt()) && (regs[MB_MTR_THROTTLE] != motors[regs[MB_MTR_TARGET]].getThrottle()))
-    motors[regs[MB_MTR_TARGET]].setVector(regs[MB_MTR_THROTTLE], (enum travel_direction)regs[MB_MTR_DIR]);
+  if ((regs[MB_MTR_IDX] < da_motor::getMotorCnt()) && (regs[MB_MTR_THROTTLE] != motors[regs[MB_MTR_IDX]].getThrottle()))
+    motors[regs[MB_MTR_IDX]].setVector(regs[MB_MTR_THROTTLE], (enum travel_direction)regs[MB_MTR_DIR]);
+    
+  /* update switch status */
+  if ((regs[MB_SW_IDX] < da_switch::getSwitchCnt()) && (regs[MB_SW_STATE] != switches[regs[MB_SW_IDX]].getState()))
+    switches[regs[MB_MTR_IDX]].setState((enum switch_state)regs[MB_SW_STATE]);
+    
+  /* update all active sensor */
+  
 }
 
