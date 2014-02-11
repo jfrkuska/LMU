@@ -67,7 +67,7 @@ public:
   enum forward_rotation getForwardRotation(void) { return rotation; }
   enum travel_direction getDirection(void) { return direction; }
   void setDirection(enum travel_direction new_dir) { direction = new_dir; }
-  static uchar getMtrCnt(void) { return tot_num_motors; }
+  static uchar getMotorCnt(void) { return tot_num_motors; }
  };
  
 #endif
