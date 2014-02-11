@@ -28,17 +28,23 @@
  #include "da_types.h"
  #include "da_sensor.h"
  
+#define MAX_SAMPLES	10
+
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_analong_sensor {
+
+class da_analog_sensor: public da_sensor {
+private:
+	uint samples[MAX_SAMPLES];
+	uchar sample_top;
 public:
-	da_analog_sensor(uint maxrate = 0, uint samplebits = 0): 
-	samplerate_max(maxrate), sample_bits(samplebits) { tot_num_sensors++; }
+	da_analog_sensor(uint rate, uint maxrate = 0): 
+	da_sensor(rate, maxrate), sample_top(0) { }
 
 	uchar Connect(void);
 	uchar Disconnect(void);
-	t_sample* Sample(void);
+	void Sample(void);
 };
 
 #endif

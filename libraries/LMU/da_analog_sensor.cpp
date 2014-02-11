@@ -25,13 +25,17 @@
 
 #include "da_analog_sensor.h"
 
-uchar da_analog_sensor::Connect(void) {
-	return 0;
-}
-uchar da_analog_sensor::Disconnect(void) {
-	return 0;
-}
+//template<> uchar da_analog_sensor::Connect(void) {
+//	return 0;
+//}
+//uchar da_analog_sensor::Disconnect(void) {
+//	return 0;
+//}
 
-t_sample da_analog_sensor::Sample(void) {
-	return 0;
-}
+//<int>T da_analog_sensor::Sample(void) {
+//	return 0;
+//}
+//
+//uchar da_analog_sensor::Calibrate(void) {
+//	return 0;
+//}

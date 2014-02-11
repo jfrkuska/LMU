@@ -30,23 +30,24 @@
 /******************************************************************************
  * Classes
  ******************************************************************************/
-template <typename T>
 class da_sensor {
 private:
-	vector<T> samples; 
-    uint max_samples;
-	uint max_rate; /* samples per second */
 	static uchar tot_num_sensors;	/* total motors derived from class */
+	uint max_rate; 					/* samples per second */
+	uint rate;						/* 0 <= current sample rate <= max_rate */
 public:
-	da_sensor(uint maxrate = 1, maxsamples = 10): 
-	max_samples(maxsamples), max_rate(maxrate) { 
+	da_sensor(uint rate = 1, uint maxrate = 1): 
+	rate(rate), max_rate(maxrate) { 
 		tot_num_sensors++; 
 	}
 
 	virtual uchar Connect(void) = 0;
 	virtual uchar Disconnect(void) = 0;
-	virtual t_sample* Sample(void) = 0;
 	virtual uchar Calibrate(void) = 0;
+	virtual uchar SetRate(uint) = 0;
+	virtual void Sample(void) = 0;
+	uint GetRate(void) { return rate; }
+	static uchar getSensorCnt(void) { return tot_num_sensors; }
 };
 
 #endif
