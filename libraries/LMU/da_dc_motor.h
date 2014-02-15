@@ -36,7 +36,7 @@ private:
 	uchar pin1;
 public:
 	da_dc_motor(enum forward_rotation rot,
-		uchar tmax,
+		uint tmax,
 		uchar en, 
 		uchar p0, 
 		uchar p1): da_motor(rot, tmax), enable_pin(en), pin0(p0), pin1(p1) {
@@ -44,7 +44,7 @@ public:
 			pinMode(pin0, OUTPUT);
 			pinMode(pin1, OUTPUT);
 		}
-	int setVector(uchar, enum travel_direction);
+	int setVector(uint, enum travel_direction);
 };
 
 #endif

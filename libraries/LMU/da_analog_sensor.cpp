@@ -25,17 +25,20 @@
 
 #include "da_analog_sensor.h"
 
-//template<> uchar da_analog_sensor::Connect(void) {
-//	return 0;
-//}
-//uchar da_analog_sensor::Disconnect(void) {
-//	return 0;
-//}
+template<> void da_analog_sensor<uint>::Sample(void) {
+	for (uint i; i < value_count; i++) {
+		if (values)
+			values[i] = analogRead(pin); 
+		else
+			return;
+	}
+}
 
-//<int>T da_analog_sensor::Sample(void) {
-//	return 0;
-//}
-//
-//uchar da_analog_sensor::Calibrate(void) {
-//	return 0;
-//}
+template<> void da_analog_sensor<float>::Sample(void) {
+	for (uint i; i < value_count; i++) {
+		if (values)
+			values[0] = analogRead(pin) * conversion_rate;
+		else
+			return;
+	}
+}

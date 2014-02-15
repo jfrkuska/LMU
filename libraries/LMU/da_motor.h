@@ -26,6 +26,7 @@
  * Includes
  ******************************************************************************/
  #include "da_types.h"
+#include "Arduino.h"
 
  /******************************************************************************
  * Typedefs
@@ -54,20 +55,18 @@ class da_motor {
 private:
   enum forward_rotation rotation;						/* cw or ccw */
   enum travel_direction direction;						/* present rotation direction */
-  uchar throttle_present;       						/* present motor throttle */
+  uint throttle_present;       							/* present motor throttle */
   uint throttle_max;									/* max motor throttle count */
-  static uchar tot_num_motors;							/* total motors derived from class */
   uchar setForwardRotation(enum forward_rotation rot) { rotation = rot; }
 public:
-  da_motor(enum forward_rotation rot, uchar tmax): 
-  rotation(rot), throttle_max(tmax) { tot_num_motors++; }
-  virtual int setVector(uchar, enum travel_direction) = 0;
-  uchar setThrottle(int value) { throttle_present = value & 0xFF; }
-  uchar getThrottle(void) { return throttle_present; }
+  da_motor(enum forward_rotation rot, uint tmax): 
+  rotation(rot), throttle_max(tmax) { }
+  virtual int setVector(uint, enum travel_direction) = 0;
+  uint setThrottle(int value) { throttle_present = min(value, throttle_max);  }
+  uint getThrottle(void) { return throttle_present; }
   enum forward_rotation getForwardRotation(void) { return rotation; }
   enum travel_direction getDirection(void) { return direction; }
   void setDirection(enum travel_direction new_dir) { direction = new_dir; }
-  static uchar getMotorCnt(void) { return tot_num_motors; }
  };
  
 #endif

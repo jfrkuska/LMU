@@ -32,14 +32,10 @@
  ******************************************************************************/
 class da_sensor {
 private:
-	static uchar tot_num_sensors;	/* total motors derived from class */
 	uint max_rate; 					/* samples per second */
 	uint rate;						/* 0 <= current sample rate <= max_rate */
 public:
-	da_sensor(uint rate = 1, uint maxrate = 1): 
-	rate(rate), max_rate(maxrate) { 
-		tot_num_sensors++; 
-	}
+	da_sensor(uint rate = 1, uint maxrate = 1): rate(rate), max_rate(maxrate) { }; 
 
 	virtual uchar Connect(void) = 0;
 	virtual uchar Disconnect(void) = 0;
@@ -47,7 +43,6 @@ public:
 	virtual uchar SetRate(uint) = 0;
 	virtual void Sample(void) = 0;
 	uint GetRate(void) { return rate; }
-	static uchar getSensorCnt(void) { return tot_num_sensors; }
 };
 
 #endif

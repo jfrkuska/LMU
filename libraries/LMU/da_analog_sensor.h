@@ -27,24 +27,29 @@
  ******************************************************************************/
  #include "da_types.h"
  #include "da_sensor.h"
- 
-#define MAX_SAMPLES	10
+ #include "Arduino.h"
 
 /******************************************************************************
  * Classes
  ******************************************************************************/
 
+template <class T>
 class da_analog_sensor: public da_sensor {
 private:
-	uint samples[MAX_SAMPLES];
-	uchar sample_top;
+protected:
+	T *values;
+	uint value_count;
+	uchar pin;
+	float conversion_rate;
 public:
-	da_analog_sensor(uint rate, uint maxrate = 0): 
-	da_sensor(rate, maxrate), sample_top(0) { }
+	da_analog_sensor(uchar pin, uint rate = 1, uint maxrate = 1, T *values = 0, uint count = 0): 
+	pin(pin), values(values), value_count(count), da_sensor(rate, maxrate) { }
 
-	uchar Connect(void);
-	uchar Disconnect(void);
+	uchar Connect(void) { return 0; }
+	uchar Disconnect(void) { return 0; }
 	void Sample(void);
+	void SetConversionRate(float rate) { conversion_rate = rate; }
+	void SetDataContainer(T *dataptr, uint size) { values = dataptr; value_count = size; }
 };
 
 #endif

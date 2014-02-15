@@ -18,8 +18,14 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef da_lmu_h
-#define da_lmu_h
+#ifndef da_modbus_lmu_h
+#define da_modbus_lmu_h
+
+/* Modbus slave configuration parameters */
+#define MB_SLAVE     1
+#define MB_BAUD      115200
+#define MB_PARITY    'e'
+#define MB_TXENPIN   0
 
 /******************************************************************************
  * Includes
@@ -28,31 +34,35 @@
  #include "da_motor.h"
  #include "da_sensor.h"
  #include "da_switch.h"
+#include "da_lmu.h"
+#include <ModbusSlave.h>
  
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_lmu {
-private:
-  da_motor *motors;
-  da_sensor *sensors;
-  da_switch *switches;
-  uchar motor_cnt;
-  uchar sensor_cnt;
-  uchar switch_cnt;
-  unsigned int operation_time_s;	/* time in operation in seconds */
-  uint timeout;
+/* modbus slave registers */
+enum {        
+  MB_MTR_IDX,        /* motor index to set */
+  MB_MTR_DIR,        /* BRAKE, FORWARD, REVERSE */
+  MB_MTR_THROTTLE,   /* 0x00 - 0xFF */
+  MB_SW_IDX,         /* switch index to set */
+  MB_SW_STATE,       /* switch state */
+  MB_SENSR_IDX,      /* sensor index to set */
+  MB_SENSR_REG,      /* sensor setting */
+  MB_SENSR_VAL,      /* sensor value */
+  MB_REGS	     /* total number of registers on slave */
+};
 
+class da_modbus_lmu: public da_lmu {
+private:
+	int regs[MB_REGS];
+	ModbusSlave mbs;
+	unsigned long wdog;         /* watchdog */
 public:
-  da_lmu(uint timeout = 5000): timeout(timeout), motors(0), sensors(0), switches(0), operation_time_s(0) {}
-  
-  class da_motor* get_motor(uchar motor_num);
-  class da_sensor* get_sensor(uchar sensor_num);
-  class da_switch* get_switch(uchar switch_num);
-  void set_sensors(da_sensor *sensors) { sensors = sensors; }
-  void set_motors(da_motor *motors) { motors = motors; }
-  void set_switches(da_switch *switches) { switches = switches; }
-  uint getTimeout(void) { return timeout; }
+  da_modbus_lmu(): mbs(), wdog(0), da_lmu() {}
+
+  void Configure(uchar slave = MB_SLAVE, uint baud = MB_BAUD, char parity = MB_PARITY, uchar pin = MB_TXENPIN);
+  void Update(void);
 };
 
 #endif

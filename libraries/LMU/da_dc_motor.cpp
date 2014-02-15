@@ -26,11 +26,11 @@
 #include "da_dc_motor.h"
 
 /* set dc mtr throttle and direction */
-int da_dc_motor::setVector(uchar amount, enum travel_direction dir)
+int da_dc_motor::setVector(uint throttle, enum travel_direction dir)
 {
     enum forward_rotation forward = getForwardRotation();
     
-    if ((getThrottle() == amount) && (getDirection() == dir))
+    if ((throttle == getThrottle()) && (dir == getDirection()))
 		return 0;
 		    
     digitalWrite(pin0, LOW);
@@ -50,9 +50,9 @@ int da_dc_motor::setVector(uchar amount, enum travel_direction dir)
     } else return -1;
     
     setDirection(dir);
-    setThrottle(amount);
+    setThrottle(throttle);
 
-    analogWrite(enable_pin, amount);
+    analogWrite(enable_pin, throttle);
     
     return 0;
 }
