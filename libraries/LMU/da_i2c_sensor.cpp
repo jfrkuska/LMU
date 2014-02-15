@@ -24,7 +24,8 @@
  ******************************************************************************/
 
 #include "da_i2c_sensor.h"
-
+#include <Wire.h>
+ 
 void da_i2c_sensor::ReadRegisters(uchar addr, uint bytes, uchar *dest)
 {
   Wire.beginTransmission(bus_addr);
@@ -45,7 +46,7 @@ uchar da_i2c_sensor::ReadRegister(uchar addr)
   Wire.write(addr);
   Wire.endTransmission(false); //endTransmission but keep the connection active
 
-  Wire.requestFrom(bus_addr, 1); //Ask for 1 byte, once done, bus is released by default
+  Wire.requestFrom(bus_addr, (uchar)1); //Ask for 1 byte, once done, bus is released by default
 
   while(!Wire.available()) ; //Wait for the data to come back
   

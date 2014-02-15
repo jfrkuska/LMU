@@ -23,6 +23,7 @@
 #include <da_i2c_sensor.h>
 #include <ModbusSlave.h>
 #include <MemoryFree.h>
+#include <Wire.h>
 
 #define MOTOR_CNT    2
 #define SENSOR_CNT    0
@@ -52,19 +53,16 @@ da_direct_switch switches[] = {
   da_direct_switch(SW_LED_PIN, SW_ON)
 };
 
-da_analog_sensor <int> sensors[] = {
+//da_analog_sensor <int> sensors[] = {
 //  <int>da_analog_sensor (A0, 10, 1); 
-}
+//}
 
 da_modbus_lmu chassis;
 
 unsigned long tprev = 0;        /* previous time*/
 
 void setup() 
-{
-  /* I2C - Join the bus as a masterx */
-  Wire.begin(); 
-    
+{    
   Serial.print("freeMemory()=");
   Serial.println(freeMemory());
 

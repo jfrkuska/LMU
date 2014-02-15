@@ -19,29 +19,36 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef da_i2c_sensor_h
-#define da_i2c_sensor_h
+#ifndef da_mma8452q_sensor_h
+#define da_mma8452q_sensor_h
+
+#define MMA8452_ADDRESS 	0x1C	/* 0x1d if high 0x1C if low */
+#define MMA8452_MAX_RATE	800		/* Hz */
+
+//MMA8452 registers
+#define OUT_X_MSB 		0x01
+#define XYZ_DATA_CFG  	0x0E
+#define WHO_AM_I   		0x0D
+#define CTRL_REG1  		0x2A
 
 /******************************************************************************
  * Includes
  ******************************************************************************/
  #include "da_types.h"
- #include "da_sensor.h"
+ #include "da_i2c_sensor.h"
  
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_i2c_sensor : public da_sensor {
+class da_mma8452a_sensor : public da_i2c_sensor {
 private:
-	uchar bus_addr;						/* bus address */
-	uchar who_am_i;						/* id register address */
 protected:
 	void ReadRegisters(uchar addr, uint bytes, uchar *dest);
 	uchar ReadRegister(uchar addr);
 	void WriteRegister(uchar addr, uchar data);
 public:
-	da_i2c_sensor(uchar addr, uchar whoami, uint rate = 1, uint maxrate = 1): 
-	bus_addr(addr), who_am_i(whoami), da_sensor(rate, maxrate) { }
+	da_mma8452a_sensor(uchar SA0 = MMA8452_ADDRESS, uint rate = 1) : da_i2c_sensor(SA0, WHO_AM_I, rate, MMA8452_MAX_RATE): 
+	{ }
 	
 	virtual uchar Connect(void) = 0;
 	virtual uchar Disconnect(void) = 0;

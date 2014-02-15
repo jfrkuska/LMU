@@ -45,6 +45,9 @@ public:
 	da_analog_sensor(uchar pin, uint rate = 1, uint maxrate = 1, T *values = 0, uint count = 0): 
 	pin(pin), values(values), value_count(count), da_sensor(rate, maxrate) { }
 
+	virtual uchar Calibrate(void) { return 0; }
+	virtual uchar SetRate(uint) { return 0; }
+	
 	uchar Connect(void) { return 0; }
 	uchar Disconnect(void) { return 0; }
 	void Sample(void);
