@@ -27,12 +27,23 @@
 
 
 #include <da_l298_motor.h>
+#include <da_wheel.h>
 
+/* L298N Motor Driver Pins */
 #define M0_EN_PIN 10
 #define M0_P0_PIN 12
 #define M0_P1_PIN 13
+#define M1_EN_PIN 9
+#define M1_P0_PIN 8
+#define M1_P1_PIN 11
 
-da_l298_motor motor(M0_EN_PIN, M0_P0_PIN, M0_P1_PIN);
+da_l298_motor motorFR(M0_EN_PIN, M0_P0_PIN, M0_P1_PIN);
+da_l298_motor motorBL(M1_EN_PIN, M1_P0_PIN, M1_P1_PIN);
+
+da_wheel wheels[] {
+  da_wheel front_right(motorFR, 4.2, LMU_CW);
+  da_wheel back_left(motorBL, 4.2, LMU_CCW);
+}
 
 void setup() 
 {

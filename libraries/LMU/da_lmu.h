@@ -32,7 +32,7 @@
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_lmu {
+class da_lmu: public da_rover_lmu {
 private:
   da_motor *motors;
   da_sensor *sensors;
@@ -46,6 +46,9 @@ private:
 public:
   da_lmu(uint timeout = 5000): timeout(timeout), motors(0), sensors(0), switches(0), operation_time_s(0) {}
   
+  virtual void Rotate(uint throttle, enum RotationOrientation) = 0;
+  virtual void Travel(uint throttle, enum TravelDirection) = 0;
+	
   class da_motor* get_motor(uchar motor_num);
   class da_sensor* get_sensor(uchar sensor_num);
   class da_switch* get_switch(uchar switch_num);

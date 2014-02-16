@@ -27,35 +27,41 @@
  ******************************************************************************/
 #include "da_types.h"
 
+/* Name: enum TravelDirection
+ * linear travel directions */
+enum TravelDirection {
+	LMU_FORWARD,
+	LMU_REVERSE
+};
+
 /* 
-* Name: enum forward_rotation
+* Name: enum RotationOrientation
 * This sets the way the motor turns in order to progress linearly forward */
-enum MotorRotation {
-	MTR_CW,
-	MTR_CCW,
-	MTR_BRAKE,
+enum RotationOrientation {
+	LMU_CW,
+	LMU_CCW,
+	LMU_BRAKE,
 };
 
 class da_motor_driver {
 private:
 	uint trim;
-	enum MotorRotation spinOrientation;
 protected:
 	uint throttle;
 	uint throttleMask;
+	enum RotationOrientation spinOrientation;
 public:
-	da_motor_driver(uint mask): throttle(0), trim(0), spinOrientation(MTR_BRAKE), throttleMask(mask) { }
+	da_motor_driver(uint mask): throttle(0), trim(0), spinOrientation(LMU_BRAKE), throttleMask(mask) { }
 	
 	virtual void On(void) = 0;
 	virtual void Off(void) = 0;
-	virtual void SetThrottle(uint) = 0;
+	virtual void SetVector(uint, enum RotationOrientation) = 0;
 
 	/* trim should not be more than half the mask value */
 	void SetTrim(uint value) { trim = value & (throttleMask >> 1); }
 	uint GetTrim(void) { return trim; }
 	uint GetThrottle(void) { return throttle; }
-	enum MotorRotation GetRotation(void) { return spinOrientation; }
-	void SetRotation(enum MotorRotation spin) { spinOrientation = spin; }
+	enum RotationOrientation GetRotation(void) { return spinOrientation; }
 };
 
 #endif

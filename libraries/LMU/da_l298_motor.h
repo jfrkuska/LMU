@@ -47,7 +47,7 @@ public:
 	
 	void On(void) { analogWrite(enablePin, throttle); }
 	void Off(void) { analogWrite(enablePin, 0); }
-	void SetThrottle(uint amount);
+	void SetVector(uint amount, enum RotationOrientation);
 };
 
 #endif

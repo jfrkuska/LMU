@@ -26,10 +26,8 @@
 #include "da_l298_motor.h"
 
 /* set dc mtr throttle and direction */
-void da_l298_motor::SetThrottle(uint value)
+void da_l298_motor::SetVector(uint value, enum RotationOrientation rot)
 {
-	
-	enum MotorRotation dir = GetRotation();
 	
     if (throttle == value)
 		return;
@@ -39,7 +37,7 @@ void da_l298_motor::SetThrottle(uint value)
     digitalWrite(pin0, LOW);
     digitalWrite(pin1, LOW);
    
-    switch(dir) {
+    switch(rot) {
     case MTR_CW:
     	digitalWrite(pin0, HIGH);
     	break;

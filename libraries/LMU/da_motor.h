@@ -36,14 +36,14 @@
 * This sets the way the motor turns in order to progress linearly forward */
 enum forward_rotation {
 	MTR_CW,
-	MTR_CCW
+	MTR_CCW,
+	MTR_BRAKE
 };
 
 /* Name: enum travel_direction
  * this sets the motor to either move forward or backwards linearly
  * from its current position */
 enum travel_direction {
-	MTR_BRAKE,
 	MTR_FORWARD,
 	MTR_REVERSE
 };
