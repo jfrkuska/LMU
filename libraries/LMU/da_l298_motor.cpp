@@ -23,40 +23,32 @@
  * Includes
  ******************************************************************************/
 
-#include "da_i2c_sensor.h"
-#include <Wire.h>
+#include "da_l298_motor.h"
 
-void da_i2c_sensor::ReadRegisters(uchar addr, uint bytes, uchar *dest)
+/* set dc mtr throttle and direction */
+void da_l298_motor::SetThrottle(uint value)
 {
-  Wire.beginTransmission(bus_addr);
-  Wire.write(addr);
-  Wire.endTransmission(false);
+	
+	enum MotorRotation dir = GetRotation();
+	
+    if (throttle == value)
+		return;
+		
+    throttle = value & throttleMask;
+    
+    digitalWrite(pin0, LOW);
+    digitalWrite(pin1, LOW);
+   
+    switch(dir) {
+    case MTR_CW:
+    	digitalWrite(pin0, HIGH);
+    	break;
+    case MTR_CCW:
+        digitalWrite(pin1, HIGH);
+    case MTR_BRAKE:
+    default:
+    	break;
+    }
 
-  Wire.requestFrom(bus_addr, bytes); //Ask for bytes, once done, bus is released by default
-
-  while(Wire.available() < bytes); //Hang out until we get the # of bytes we expect
-
-  for(uint x = 0; x < bytes; x++)
-    dest[x] = Wire.read();    
-}
-
-uchar da_i2c_sensor::ReadRegister(uchar addr)
-{
-  Wire.beginTransmission(bus_addr);
-  Wire.write(addr);
-  Wire.endTransmission(false); //endTransmission but keep the connection active
-
-  Wire.requestFrom(bus_addr, (uchar)1); //Ask for 1 byte, once done, bus is released by default
-
-  while(!Wire.available()) ; //Wait for the data to come back
-  
-  return Wire.read(); //Return this one byte
-}
-
-void da_i2c_sensor::WriteRegister(uchar addr, uchar data)
-{
-  Wire.beginTransmission(bus_addr);
-  Wire.write(addr);
-  Wire.write(data);
-  Wire.endTransmission(); //Stop transmitting
+    analogWrite(enablePin, throttle);
 }
