@@ -22,7 +22,31 @@
 #ifndef da_types_h
 #define da_types_h
 
+#if 1
+#define DA_DEBUG(X) (Serial.print(X))
+#define DA_DEBUG_F(X,Y) (Serial.println(X,Y))
+#define da_debug
+#define da_debug_motor
+#define da_debug_sensor
+#endif
+
 typedef unsigned char 	uchar;
 typedef unsigned int 	uint;
+
+/* Name: enum TravelDirection
+ * linear travel directions */
+enum TravelDirection {
+	LMU_FORWARD,
+	LMU_REVERSE
+};
+
+/* 
+* Name: enum RotationOrientation
+* This sets the way the motor turns in order to progress linearly forward */
+enum RotationOrientation {
+	LMU_CW,
+	LMU_CCW,
+	LMU_BRAKE,
+};
 
 #endif

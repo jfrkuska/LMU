@@ -18,55 +18,50 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef da_rover_lmu_h
-#define da_rover_lmu_h
+
+#ifndef da_mma8452q_sensor_h
+#define da_mma8452q_sensor_h
+
+#define MMA8452_ADDRESS 	0x1C	/* 0x1d if high 0x1C if low */
+#define MMA8452_MAX_RATE	800		/* Hz */
+#define MMA8452_GSCALE		2		/* +/- 2g */
+
+//MMA8452 registers
+#define OUT_X_MSB 		0x01
+#define XYZ_DATA_CFG  	0x0E
+#define WHO_AM_I   		0x0D
+#define CTRL_REG1  		0x2A
 
 /******************************************************************************
  * Includes
  ******************************************************************************/
  #include "da_types.h"
- #include "da_wheel.h"
- #include "da_lmu.h"
-
-enum LMURover {
-	LMU_ROVER_LEFT,
-	LMU_ROVER_RIGHT,
-	LMU_ROVER_SIDES
-};
-
+ #include "da_i2c_sensor.h"
+ 
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_rover_lmu: public da_lmu {
+class da_mma8452q_sensor: public da_i2c_sensor {
 private:
-  da_wheel *wheels[LMU_ROVER_SIDES];
-  byte wheelCount[LMU_ROVER_SIDES];
-  da_sensor *fbSensors;
-  byte	fbSensorCount;
+	int *sampleData;
+	void ReadAccelData(int *destination);
+	byte gsel;
 public:
-  da_rover_lmu(da_wheel *leftWheels = 0,
-		  byte leftWheelCount = 0,
-		  da_wheel *rightWheels = 0,
-		  byte rightWheelCount = 0,
-		  da_switch *switches = 0,
-		  byte wCount = 0,
-		  da_sensor *sensors = 0,
-		  byte sCount = 0,
-		  da_motor_driver *motors = 0,
-		  byte mCount = 0):\ 
-		  da_lmu(switches, wCount, sensors, sCount, motors, mCount) {}
-  
-  void Init(void);
-  void Rotate(uint throttle, enum RotationOrientation);
-  void Travel(uint throttle, enum TravelDirection);
-  void Calibrate(void);
-  void ConfigureChassis(
-		  da_wheel *leftWheels,
-		  byte leftWheelCount,
-		  da_wheel *rightWheels,
-		  byte rightWheelCount);
-  void ConfigureFBSensor(da_sensor *fbSensors, byte count) { fbSensors = fbSensors; fbSensorCount = count; }
-  void Update(void) { if (fbSensors) fbSensors[0].Sample(); }
+	da_mma8452q_sensor(int *sampleData, uint rate = MMA8452_MAX_RATE,
+			byte slaveAddress = MMA8452_ADDRESS, byte gsel = MMA8452_GSCALE):
+				sampleData(sampleData),
+				gsel(gsel),
+				da_i2c_sensor(slaveAddress,
+						WHO_AM_I,
+						rate,
+						MMA8452_MAX_RATE) { }
+	
+	void Init(void);
+	void Connect(void);
+	void Disconnect(void);
+	void Calibrate(void) {}
+	void SetRate(uint) {}
+	void Sample(void);
 };
 
 #endif

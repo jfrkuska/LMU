@@ -22,25 +22,32 @@
 #ifndef da_sensor_h
 #define da_sensor_h
 
+#ifdef da_debug_sensor
+#define DA_DEBUG_SENSOR(X) (DA_DEBUG(X))
+#define DA_DEBUG_SENSOR_F(X,Y) DA_DEBUG_F(X,Y)
+#else
+#define DA_DEBUG_SENSOR(X)
+#define DA_DEBUG_SENSOR_F(X,Y)
+#endif
+
 /******************************************************************************
  * Includes
  ******************************************************************************/
  #include "da_types.h"
+#include "da_device.h"
  
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_sensor {
+class da_sensor: public da_device {
 private:
-	uint max_rate; 					/* samples per second */
+	uint maxRate; 					/* samples per second */
 	uint rate;						/* 0 <= current sample rate <= max_rate */
 public:
-	da_sensor(uint rate = 1, uint maxrate = 1): rate(rate), max_rate(maxrate) { }; 
+	da_sensor(uint rate = 1, uint maxrate = 1): rate(rate), maxRate(maxrate) { }; 
 
-	virtual uchar Connect(void) = 0;
-	virtual uchar Disconnect(void) = 0;
-	virtual uchar Calibrate(void) = 0;
-	virtual uchar SetRate(uint) = 0;
+	virtual void Calibrate(void) = 0;
+	virtual void SetRate(uint) = 0;
 	virtual void Sample(void) = 0;
 	uint GetRate(void) { return rate; }
 };

@@ -25,37 +25,53 @@
  * Includes
  ******************************************************************************/
  #include "da_types.h"
- #include "da_motor.h"
+ #include "da_motor_driver.h"
  #include "da_sensor.h"
  #include "da_switch.h"
+ #include "da_device.h"
  
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_lmu: public da_rover_lmu {
+class da_lmu: public da_device {
 private:
-  da_motor *motors;
+  da_motor_driver *motors;
   da_sensor *sensors;
   da_switch *switches;
-  uchar motor_cnt;
-  uchar sensor_cnt;
-  uchar switch_cnt;
-  unsigned int operation_time_s;	/* time in operation in seconds */
-  uint timeout;
-
+  byte motorCount;
+  byte sensorCount;
+  byte switchCount;
 public:
-  da_lmu(uint timeout = 5000): timeout(timeout), motors(0), sensors(0), switches(0), operation_time_s(0) {}
+  da_lmu(da_switch *switches = 0,
+		  byte wCount = 0,
+		  da_sensor *sensors = 0,
+		  byte sCount = 0,
+		  da_motor_driver *motors = 0,
+		  byte mCount = 0):\
+		  motors(motors), 
+		  sensors(sensors),
+		  switches(switches),
+		  motorCount(mCount),
+		  sensorCount(sCount),
+		  switchCount(wCount)
+		  {}
   
   virtual void Rotate(uint throttle, enum RotationOrientation) = 0;
   virtual void Travel(uint throttle, enum TravelDirection) = 0;
-	
-  class da_motor* get_motor(uchar motor_num);
-  class da_sensor* get_sensor(uchar sensor_num);
-  class da_switch* get_switch(uchar switch_num);
-  void set_sensors(da_sensor *sensors) { sensors = sensors; }
-  void set_motors(da_motor *motors) { motors = motors; }
-  void set_switches(da_switch *switches) { switches = switches; }
-  uint getTimeout(void) { return timeout; }
+  virtual void Calibrate(void) = 0;
+  
+  void Init(void) { /* TODO call Init on all mtrs, sensrs, switches */ }
+  void Connect(void) { }
+  void Disconnect(void) { /* call all */ }
+  class da_motor_driver* GetMotor(byte motorNum);
+  class da_sensor* GetSensor(byte sensorNum);
+  class da_switch* GetSwitch(byte switchNum);
+  void SetMotors(da_motor_driver *motors, byte mCount) { motors = motors; motorCount = mCount; }
+  void SetSensors(da_sensor *sensors, byte sCount) { sensors = sensors; sensorCount = sCount; }
+  void SetSwitches(da_switch *switches, byte wCount) { switches = switches; switchCount = wCount; }
+  byte GetMotorCnt(void) { return motorCount; }
+  byte GetSensorCnt(void) { return sensorCount; }
+  byte GetSwitchCnt(void) { return switchCount; }
 };
 
 #endif

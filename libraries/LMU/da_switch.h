@@ -27,6 +27,7 @@
  ******************************************************************************/
 #include "Arduino.h"
 #include "da_types.h"
+#include "da_device.h"
  
 enum switch_state {
 	SW_OFF = 0,
@@ -36,19 +37,17 @@ enum switch_state {
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_switch {
+class da_switch: public da_device {
 private:
 	uchar on_state;
-    static uchar tot_num_switches;	/* total switches derived from class */
 	virtual void on(void) = 0;
 	virtual void off(void) = 0;
 public:
-	da_switch(uchar on_state = SW_ON): on_state(on_state) { tot_num_switches++; }
+	da_switch(uchar on_state = SW_ON): on_state(on_state) { }
 	uchar getOnState(void) { return on_state; }
 	
 	virtual enum switch_state getState(void) = 0;
 	virtual void setState(enum switch_state) = 0;
-	static uchar getSwitchCnt(void) { return tot_num_switches; }
 };
 
 #endif

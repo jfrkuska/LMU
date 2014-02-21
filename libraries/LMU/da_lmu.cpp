@@ -25,26 +25,26 @@
 #include "Arduino.h"
 #include "da_lmu.h"
 
-class da_motor* da_lmu::get_motor(uchar motor_num) 
+da_motor_driver* da_lmu::GetMotor(byte motorNum) 
 {
 	if (motors)
-		return &motors[motor_num];
+		return &motors[motorNum];
 	else
 		return NULL;
 }
 
-class da_sensor* da_lmu::get_sensor(uchar sensor_num)
+da_sensor* da_lmu::GetSensor(byte sensorNum)
 {
 	if (sensors)
-		return &sensors[sensor_num];
+		return &sensors[sensorNum];
 	else
 		return NULL;
 }
 
-class da_switch* da_lmu::get_switch(uchar switch_num) 
+da_switch* da_lmu::GetSwitch(byte switchNum) 
 {
 	if (switches)
-		return &switches[switch_num];
+		return &switches[switchNum];
 	else
 		return NULL;
 }

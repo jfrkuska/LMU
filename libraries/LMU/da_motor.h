@@ -59,6 +59,7 @@ private:
   uint throttle_max;									/* max motor throttle count */
   uchar setForwardRotation(enum forward_rotation rot) { rotation = rot; }
 public:
+  virtual void Init(void) = 0;
   da_motor(enum forward_rotation rot, uint tmax): 
   rotation(rot), throttle_max(tmax) { }
   virtual int setVector(uint, enum travel_direction) = 0;

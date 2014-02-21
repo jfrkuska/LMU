@@ -48,6 +48,9 @@ public:
 	void On(void) { analogWrite(enablePin, throttle); }
 	void Off(void) { analogWrite(enablePin, 0); }
 	void SetVector(uint amount, enum RotationOrientation);
+	void Init(void) { }
+//	void Connect(void) { }
+//	void Disconnect(void) {}
 };
 
 #endif

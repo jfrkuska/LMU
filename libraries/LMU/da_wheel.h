@@ -29,17 +29,27 @@
  #include "da_motor_driver.h"
  #include "Arduino.h"
 
+#define CALIBRATE_DELAY 3000
+
 /******************************************************************************
  * Classes
  ******************************************************************************/
 class da_wheel {
 private:
-  enum MotorRotation forwardRotation;					/* rotation orientation for the wheel to move forward */
+  enum RotationOrientation forwardRotation;					/* rotation orientation for the wheel to move forward */
   da_motor_driver &driver;
   float diameter;
   enum TravelDirection direction;
 public:
-  da_wheel(da_motor_driver &driver, float diameter, enum RotationOrientation rot): forwardRotation(rot), driver(driver), diameter(diameter), direction(LMU_FORWARD) { }
+  da_wheel(da_motor_driver &driver,
+		  float diameter,
+		  enum RotationOrientation rot):\
+		  forwardRotation(rot),
+		  driver(driver),
+		  diameter(diameter),
+		  direction(LMU_FORWARD) { }
+  
+  void Init(void) { driver.Init(); }
   void setVector(uint, enum TravelDirection);
  };
  

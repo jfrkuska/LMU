@@ -40,7 +40,7 @@ void da_i2c_sensor::ReadRegisters(uchar addr, uint bytes, uchar *dest)
     dest[x] = Wire.read();    
 }
 
-uchar da_i2c_sensor::ReadRegister(uchar addr)
+byte da_i2c_sensor::ReadRegister(uchar addr)
 {
   Wire.beginTransmission(bus_addr);
   Wire.write(addr);

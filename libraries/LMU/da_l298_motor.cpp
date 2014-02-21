@@ -38,12 +38,12 @@ void da_l298_motor::SetVector(uint value, enum RotationOrientation rot)
     digitalWrite(pin1, LOW);
    
     switch(rot) {
-    case MTR_CW:
+    case LMU_CW:
     	digitalWrite(pin0, HIGH);
     	break;
-    case MTR_CCW:
+    case LMU_CCW:
         digitalWrite(pin1, HIGH);
-    case MTR_BRAKE:
+    case LMU_BRAKE:
     default:
     	break;
     }

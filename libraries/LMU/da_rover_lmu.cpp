@@ -22,7 +22,6 @@
 /******************************************************************************
  * Includes
  ******************************************************************************/
-#include "Arduino.h"
 #include "da_rover_lmu.h"
 
 void da_rover_lmu::Rotate(uint throttle, enum RotationOrientation rot) 
@@ -51,5 +50,49 @@ void da_rover_lmu::Travel(uint throttle, enum TravelDirection dir)
 			wheels[LMU_ROVER_LEFT][i].setVector(throttle, dir);
 	for (i = 0; i < wheelCount[LMU_ROVER_RIGHT]; i++)
 			wheels[LMU_ROVER_RIGHT][i].setVector(throttle, dir);
+}
+
+void da_rover_lmu::Calibrate(void)
+{
+	DA_DEBUG_MTR("Calibrating");
+
+	/* wait CALIBRATE_DELAY seconds */
+	delay(CALIBRATE_DELAY);
+	
+	/* calibrate motion sensor */
+	
+	/* roll forward and adjust trim */
+	
+	/* roll backwards and calibrate sensors */
+	
+	/* rotate 180 degrees */
+}
+
+void da_rover_lmu::Init(void) {
+	
+	int i;
+	
+	DA_DEBUG_MTR("ROVER LMU INIT");
+	
+	/* Init all feedback sensors */
+	for (i = 0; i < fbSensorCount; i++)
+		fbSensors[i].Init();
+	
+	/* Init all wheels */	
+	for (i = 0; i < wheelCount[LMU_ROVER_LEFT]; i++)
+			wheels[LMU_ROVER_LEFT][i].Init();
+	for (i = 0; i < wheelCount[LMU_ROVER_RIGHT]; i++)
+			wheels[LMU_ROVER_RIGHT][i].Init();
+	
+	da_lmu::Init();
+}
+
+void da_rover_lmu::ConfigureChassis(da_wheel *leftWheels, byte leftWheelCount,
+		  da_wheel *rightWheels, byte rightWheelCount)
+{
+	  wheels[LMU_ROVER_LEFT] = leftWheels;
+	  wheelCount[LMU_ROVER_LEFT] = leftWheelCount;
+	  wheels[LMU_ROVER_RIGHT] = rightWheels;
+	  wheelCount[LMU_ROVER_RIGHT] = rightWheelCount;
 }
  

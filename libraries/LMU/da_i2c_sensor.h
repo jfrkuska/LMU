@@ -25,28 +25,29 @@
 /******************************************************************************
  * Includes
  ******************************************************************************/
- #include "da_types.h"
- #include "da_sensor.h"
+#include "da_types.h"
+#include "da_sensor.h"
+#include "Arduino.h"
  
 /******************************************************************************
  * Classes
  ******************************************************************************/
-class da_i2c_sensor : public da_sensor {
+class da_i2c_sensor: public da_sensor {
 private:
 	uchar bus_addr;						/* bus address */
 	uchar who_am_i;						/* id register address */
 protected:
 	void ReadRegisters(uchar addr, uint bytes, uchar *dest);
-	uchar ReadRegister(uchar addr);
+	byte ReadRegister(uchar addr);
 	void WriteRegister(uchar addr, uchar data);
 public:
 	da_i2c_sensor(uchar addr, uchar whoami, uint rate = 1, uint maxrate = 1): 
 	bus_addr(addr), who_am_i(whoami), da_sensor(rate, maxrate) { }
 	
-	virtual uchar Connect(void) = 0;
-	virtual uchar Disconnect(void) = 0;
-	virtual uchar Calibrate(void) = 0;
-	virtual uchar SetRate(uint) = 0;
+	virtual void Connect(void) { }
+	virtual void Disconnect(void) { }
+	virtual void Calibrate(void) = 0;
+	virtual void SetRate(uint) = 0;
 	virtual void Sample(void) = 0;
 };
 
