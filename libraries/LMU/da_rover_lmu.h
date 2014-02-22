@@ -56,17 +56,16 @@ public:
 		  byte mCount = 0):\ 
 		  da_lmu(switches, wCount, sensors, sCount, motors, mCount) {}
   
-  void Init(void);
-  void Rotate(uint throttle, enum RotationOrientation);
-  void Travel(uint throttle, enum TravelDirection);
+  virtual void Init(void);
+  void Travel(uint throttle, enum LMUMovement);
   void Calibrate(void);
   void ConfigureChassis(
 		  da_wheel *leftWheels,
 		  byte leftWheelCount,
 		  da_wheel *rightWheels,
 		  byte rightWheelCount);
-  void ConfigureFBSensor(da_sensor *fbSensors, byte count) { fbSensors = fbSensors; fbSensorCount = count; }
-  void Update(void) { if (fbSensors) fbSensors[0].Sample(); }
+  void ConfigureFBSensor(da_sensor *sensors, byte count);
+  void Update(void);
 };
 
 #endif

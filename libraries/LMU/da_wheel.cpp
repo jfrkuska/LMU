@@ -25,13 +25,21 @@
 #include "Arduino.h"
 #include "da_wheel.h"
 
-void da_wheel::setVector(uint value, enum TravelDirection dir) {
+void da_wheel::setVector(uint value, enum LMUMovement dir) {
 	
 	direction = dir;
+	enum LMUMovement reverseRotation = 
+			forwardRotation == LMU_CW ? LMU_CCW : LMU_CW;
 	
+	DA_DEBUG_MTR("SetVector (");
+	DA_DEBUG_MTR2(value, HEX);
+	DA_DEBUG_MTR(", ");
+	DA_DEBUG_MTR2(dir, HEX);
+	DA_DEBUG_MTR(")\n");
+		
 	if (direction == LMU_FORWARD)
 		driver.SetVector(value, forwardRotation);
 	else
-		driver.SetVector(value, (enum RotationOrientation)!forwardRotation);
+		driver.SetVector(value, reverseRotation);
 
 }

@@ -24,40 +24,39 @@
  ******************************************************************************/
 #include "da_rover_lmu.h"
 
-void da_rover_lmu::Rotate(uint throttle, enum RotationOrientation rot) 
+/* assumes symmetrical wheel placement */
+void da_rover_lmu::Travel(uint throttle, enum LMUMovement dir)
 {
-	int i;
+	int i = min(wheelCount[LMU_ROVER_RIGHT], wheelCount[LMU_ROVER_LEFT]);
 	
-	for (i = 0; i < wheelCount[LMU_ROVER_LEFT]; i++) {
-		if (LMU_CW == rot)
-			wheels[LMU_ROVER_LEFT][i].setVector(throttle, LMU_FORWARD);
-		else
-			wheels[LMU_ROVER_LEFT][i].setVector(throttle, LMU_REVERSE);
-	}
-	for (i = 0; i < wheelCount[LMU_ROVER_RIGHT]; i++) {
-		if (LMU_CW == rot)
-			wheels[LMU_ROVER_RIGHT][i].setVector(throttle, LMU_REVERSE);
-		else
-			wheels[LMU_ROVER_RIGHT][i].setVector(throttle, LMU_FORWARD);
-	}
-}
+	for (i = 0; i < wheelCount[i]; i++) { 
+		DA_DEBUG_MTR("Wheel Set:");
+		DA_DEBUG_MTR(i);
+		DA_DEBUG_MTR("\n");
 
-void da_rover_lmu::Travel(uint throttle, enum TravelDirection dir)
-{
-	int i;
-	
-	for (i = 0; i < wheelCount[LMU_ROVER_LEFT]; i++)
-			wheels[LMU_ROVER_LEFT][i].setVector(throttle, dir);
-	for (i = 0; i < wheelCount[LMU_ROVER_RIGHT]; i++)
+		switch (dir) {
+		case LMU_FORWARD:
+		case LMU_BACKWARD:
 			wheels[LMU_ROVER_RIGHT][i].setVector(throttle, dir);
+			wheels[LMU_ROVER_LEFT][i].setVector(throttle, dir);
+			break;
+		case LMU_CW:
+			wheels[LMU_ROVER_RIGHT][i].setVector(throttle, LMU_BACKWARD);
+			wheels[LMU_ROVER_LEFT][i].setVector(throttle, LMU_FORWARD);
+			break;
+		case LMU_CCW:
+			wheels[LMU_ROVER_RIGHT][i].setVector(throttle, LMU_FORWARD);
+			wheels[LMU_ROVER_LEFT][i].setVector(throttle, LMU_BACKWARD);
+			break;
+		}
+	}
 }
 
 void da_rover_lmu::Calibrate(void)
 {
-	DA_DEBUG_MTR("Calibrating");
+	DA_DEBUG_MTR("Rover Calibrating\n");
 
 	/* wait CALIBRATE_DELAY seconds */
-	delay(CALIBRATE_DELAY);
 	
 	/* calibrate motion sensor */
 	
@@ -72,7 +71,7 @@ void da_rover_lmu::Init(void) {
 	
 	int i;
 	
-	DA_DEBUG_MTR("ROVER LMU INIT");
+	DA_DEBUG_MTR("Rover Init\n");
 	
 	/* Init all feedback sensors */
 	for (i = 0; i < fbSensorCount; i++)
@@ -95,4 +94,18 @@ void da_rover_lmu::ConfigureChassis(da_wheel *leftWheels, byte leftWheelCount,
 	  wheels[LMU_ROVER_RIGHT] = rightWheels;
 	  wheelCount[LMU_ROVER_RIGHT] = rightWheelCount;
 }
- 
+
+void da_rover_lmu::ConfigureFBSensor(da_sensor *sensors, byte count)
+{
+	fbSensors = sensors;
+	fbSensorCount = count; 
+}
+
+void da_rover_lmu::Update(void)
+{
+	/* sample feedback sensors */
+	if (fbSensors) {
+		for(int i = 0; i < fbSensorCount; i++)
+			fbSensors[i].Sample(); 
+	}
+}

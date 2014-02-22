@@ -35,32 +35,37 @@ void da_modbus_rover::Update(void)
 		  /* halt motors */
 		  /* turn off switches */
 		}
-	
-		/* FIXME register indexing is an ugly hack */
 		
 		/* update motor */
 		if ((motorIdx != INVALID_IDX) &&
 				(regs[motorIdx] < GetMotorCnt()) &&
 				(regs[motorIdx+2] != GetMotor(regs[motorIdx])->GetThrottle()))
-			GetMotor(regs[motorIdx])->SetVector((uint)regs[motorIdx+2], (enum RotationOrientation)regs[motorIdx+1]);
+			GetMotor(regs[motorIdx])->SetVector((uint)regs[motorIdx+2], (enum LMUMovement)regs[motorIdx+1]);
 			 
 		/* update switch */
 		if ((switchIdx != INVALID_IDX) &&
 				(regs[switchIdx] < GetSwitchCnt()) &&
 				(regs[switchIdx+1] != GetSwitch(regs[switchIdx])->getState()))
 			GetSwitch(regs[switchIdx])->setState((enum switch_state)regs[switchIdx+1]);
-		 
-		/* update sensor */
-	}
+	}	 
+		/* update chassis */
+		Travel(regs[chassisIdx], (enum LMUMovement)regs[chassisIdx+1]);
+	//}
 	
 	/* update feedback data */
 	da_rover_lmu::Update();
 	
 	/* update delta time */
-	delay(3000);
+	//delay(3000);
 	   
 }
 
+void da_modbus_rover::Init(void)
+{
+	ConfigureComm(MB_SLAVE, MB_BAUD, MB_PARITY, MB_TXENPIN);
+	da_rover_lmu::Init();
+}
+  
 void da_modbus_rover::ConfigureComm(uchar slave, uint baud, char parity, uchar pin) 
 { 
 	mbs.configure(slave, baud, parity, pin); 

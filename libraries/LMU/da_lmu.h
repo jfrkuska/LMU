@@ -56,13 +56,12 @@ public:
 		  switchCount(wCount)
 		  {}
   
-  virtual void Rotate(uint throttle, enum RotationOrientation) = 0;
-  virtual void Travel(uint throttle, enum TravelDirection) = 0;
+  virtual void Travel(uint throttle, enum LMUMovement) = 0;
   virtual void Calibrate(void) = 0;
   
-  void Init(void) { /* TODO call Init on all mtrs, sensrs, switches */ }
-  void Connect(void) { }
-  void Disconnect(void) { /* call all */ }
+  virtual void Init(void) { /* TODO call Init on all mtrs, sensrs, switches */ }
+  virtual void Connect(void) { }
+  virtual void Disconnect(void) { /* call all */ }
   class da_motor_driver* GetMotor(byte motorNum);
   class da_sensor* GetSensor(byte sensorNum);
   class da_switch* GetSwitch(byte switchNum);

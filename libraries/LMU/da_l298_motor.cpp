@@ -26,7 +26,7 @@
 #include "da_l298_motor.h"
 
 /* set dc mtr throttle and direction */
-void da_l298_motor::SetVector(uint value, enum RotationOrientation rot)
+void da_l298_motor::SetVector(uint value, enum LMUMovement rot)
 {
 	
     if (throttle == value)
@@ -43,7 +43,7 @@ void da_l298_motor::SetVector(uint value, enum RotationOrientation rot)
     	break;
     case LMU_CCW:
         digitalWrite(pin1, HIGH);
-    case LMU_BRAKE:
+    case LMU_STOP:
     default:
     	break;
     }

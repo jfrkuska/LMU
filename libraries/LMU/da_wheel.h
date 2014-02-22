@@ -36,21 +36,21 @@
  ******************************************************************************/
 class da_wheel {
 private:
-  enum RotationOrientation forwardRotation;					/* rotation orientation for the wheel to move forward */
   da_motor_driver &driver;
   float diameter;
-  enum TravelDirection direction;
+  enum LMUMovement forwardRotation;					/* rotation orientation for the wheel to move forward */
+  enum LMUMovement direction;
 public:
   da_wheel(da_motor_driver &driver,
 		  float diameter,
-		  enum RotationOrientation rot):\
+		  enum LMUMovement rot):\
 		  forwardRotation(rot),
 		  driver(driver),
 		  diameter(diameter),
 		  direction(LMU_FORWARD) { }
   
   void Init(void) { driver.Init(); }
-  void setVector(uint, enum TravelDirection);
+  void setVector(uint, enum LMUMovement);
  };
  
 #endif

@@ -24,6 +24,7 @@
 
 #if 1
 #define DA_DEBUG(X) (Serial.print(X))
+#define DA_DEBUG2(X,Y) (Serial.print(X,Y))
 #define DA_DEBUG_F(X,Y) (Serial.println(X,Y))
 #define da_debug
 #define da_debug_motor
@@ -33,20 +34,28 @@
 typedef unsigned char 	uchar;
 typedef unsigned int 	uint;
 
+enum LMUMovement {
+	LMU_FORWARD,
+	LMU_BACKWARD,
+	LMU_CW,
+	LMU_CCW,
+	LMU_STOP
+};
+
 /* Name: enum TravelDirection
  * linear travel directions */
-enum TravelDirection {
-	LMU_FORWARD,
-	LMU_REVERSE
-};
+// enum TravelDirection {
+	// LMU_FORWARD,
+	// LMU_REVERSE
+// };
 
 /* 
 * Name: enum RotationOrientation
 * This sets the way the motor turns in order to progress linearly forward */
-enum RotationOrientation {
-	LMU_CW,
-	LMU_CCW,
-	LMU_BRAKE,
-};
+// enum RotationOrientation {
+	// LMU_CW,
+	// LMU_CCW,
+	// LMU_BRAKE,
+// };
 
 #endif

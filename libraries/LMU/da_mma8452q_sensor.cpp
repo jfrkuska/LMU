@@ -53,7 +53,7 @@ void da_mma8452q_sensor::Init()
   byte c = ReadRegister(WHO_AM_I);  // Read WHO_AM_I register
   if (c == 0x2A) // WHO_AM_I should always be 0x2A
   {  
-	  DA_DEBUG_SENSOR("MMA8452Q is online...");
+	  DA_DEBUG_SENSOR("MMA8452Q is online...\n");
   }
   else
   {
@@ -89,8 +89,7 @@ void da_mma8452q_sensor::Connect()
 }
 
 void da_mma8452q_sensor::Sample()
-{
-  
+{ 
   if (!sampleData)
 	return;
   
