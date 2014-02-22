@@ -25,42 +25,54 @@
 #include "da_modbus_rover.h"
 
 void da_modbus_rover::Update(void)
-{ 
+{ 	
+	/* update chassis */
+	Travel(regs[chassisIdx], (enum LMUMovement)regs[chassisIdx+1]);
+	
+	/* update feedback data */
+	da_rover_lmu::Update();
+	
 	/* main modbus loop*/
 	if(mbs.update(regs, registerCount)) {
+	
 		wdog = millis();
 	
-		if ((millis() - wdog) > timeout)  { /* if no comm in TIMEOUT msec */
-		  /* handle timeout */
-		  /* halt motors */
-		  /* turn off switches */
-		}
-	
-		/* FIXME register indexing is an ugly hack */
+		/* update sensors */
+		if ((sensorIdx != INVALID_IDX) && regs[sensorIdx] < GetSensorCnt())
+			GetSensor(regs[sensorIdx])->Sample();
 		
 		/* update motor */
 		if ((motorIdx != INVALID_IDX) &&
 				(regs[motorIdx] < GetMotorCnt()) &&
 				(regs[motorIdx+2] != GetMotor(regs[motorIdx])->GetThrottle()))
-			GetMotor(regs[motorIdx])->SetVector((uint)regs[motorIdx+2], (enum RotationOrientation)regs[motorIdx+1]);
+			GetMotor(regs[motorIdx])->SetVector((uint)regs[motorIdx+2], (enum LMUMovement)regs[motorIdx+1]);
 			 
 		/* update switch */
 		if ((switchIdx != INVALID_IDX) &&
 				(regs[switchIdx] < GetSwitchCnt()) &&
 				(regs[switchIdx+1] != GetSwitch(regs[switchIdx])->getState()))
 			GetSwitch(regs[switchIdx])->setState((enum switch_state)regs[switchIdx+1]);
-		 
-		/* update sensor */
-	}
-	
-	/* update feedback data */
-	da_rover_lmu::Update();
+	}	 
 	
 	/* update delta time */
-	delay(3000);
+	regs[chassisIdx+5] = millis() - wdog;
+	
+	/* if no comm in TIMEOUT msec */
+	if ((regs[chassisIdx+5] - wdog) > timeout)  {
+	  /* handle timeout */
+	  /* halt motors */
+	  /* turn off switches */
+	}
 	   
 }
 
+void da_modbus_rover::Init(void)
+{
+	ConfigureComm(MB_SLAVE, MB_BAUD, MB_PARITY, MB_TXENPIN);
+	da_rover_lmu::Init();
+	wdog = millis();
+}
+  
 void da_modbus_rover::ConfigureComm(uchar slave, uint baud, char parity, uchar pin) 
 { 
 	mbs.configure(slave, baud, parity, pin); 

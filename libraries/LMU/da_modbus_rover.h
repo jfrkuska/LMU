@@ -26,7 +26,7 @@
 
 /* Modbus slave configuration parameters */
 #define MB_SLAVE     1
-#define MB_BAUD      115200
+#define MB_BAUD      57600
 #define MB_PARITY    'e'
 #define MB_TXENPIN   0
 
@@ -41,7 +41,7 @@
 /******************************************************************************
  * Classes
  ******************************************************************************/
-
+ 
 /* FIXME: modbus rover _IS_A_ Modbus class */
 class da_modbus_rover: public da_rover_lmu {
 private:
@@ -69,7 +69,7 @@ public:
   timeout(timeout) 
   { }
 
-  void Init(void) { ConfigureComm(MB_SLAVE, MB_BAUD, MB_PARITY, MB_TXENPIN); da_rover_lmu::Init(); }
+  virtual void Init(void);
   void ConfigureComm(uchar slave = MB_SLAVE, uint baud = MB_BAUD, char parity = MB_PARITY, uchar pin = MB_TXENPIN);
   void Update(void);
 };

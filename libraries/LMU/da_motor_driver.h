@@ -24,10 +24,12 @@
 
 #ifdef da_debug_motor
 #define DA_DEBUG_MTR(X) DA_DEBUG(X)
+#define DA_DEBUG_MTR2(X,Y) DA_DEBUG2(X,Y)
 #define DA_DEBUG_MTR_F(X,Y) DA_DEBUG_F(X,Y)
 #else
 #define DA_DEBUG_MTR(X)
 #define DA_DEBUG_MTR_F(X,Y)
+#define DA_DEBUG_MTR2(X,Y)
 #endif
 
 
@@ -43,13 +45,13 @@ private:
 protected:
 	uint throttle;
 	uint throttleMask;
-	enum RotationOrientation spinOrientation;
+	enum LMUMovement spinOrientation;
 public:
-	da_motor_driver(uint mask): throttle(0), trim(0), spinOrientation(LMU_BRAKE), throttleMask(mask) { }
+	da_motor_driver(uint mask): throttle(0), trim(0), spinOrientation(LMU_STOP), throttleMask(mask) { }
 	
 	virtual void On(void) = 0;
 	virtual void Off(void) = 0;
-	virtual void SetVector(uint, enum RotationOrientation) = 0;
+	virtual void SetVector(uint, enum LMUMovement) = 0;
 	virtual void Connect(void) { }
 	virtual void Disconnect(void) { }
 
@@ -57,7 +59,7 @@ public:
 	void SetTrim(uint value) { trim = value & (throttleMask >> 1); }
 	uint GetTrim(void) { return trim; }
 	uint GetThrottle(void) { return throttle; }
-	enum RotationOrientation GetRotation(void) { return spinOrientation; }
+	enum LMUMovement GetRotation(void) { return spinOrientation; }
 };
 
 #endif
