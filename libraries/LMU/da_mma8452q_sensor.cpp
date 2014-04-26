@@ -65,11 +65,15 @@ void da_mma8452q_sensor::Init()
   Disconnect();  // Must be in standby to change registers
 
   /* set sensitivity */
-  if(gsel > 8) gsel = 8;
+  if(gsel > MMA8452_MAX_G) gsel = MMA8452_MAX_G;
   gsel >>= 2; // Neat trick, see page 22. 00 = 2G, 01 = 4A, 10 = 8G
   WriteRegister(XYZ_DATA_CFG, gsel);
 
-  /* TODO: update rate */
+  /* update output data rate */
+  
+  /* update powermode */
+  if(gsel > LoPower) gsel = LoPower;
+  WriteRegister(CTRL_REG2, powermode);
 
   Connect();
 }
