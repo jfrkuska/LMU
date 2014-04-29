@@ -35,7 +35,7 @@ void da_wheel::setVector(uint value, enum LMUMovement dir) {
 	DA_DEBUG_MTR2(value, HEX);
 	DA_DEBUG_MTR(", ");
 	DA_DEBUG_MTR2(dir, HEX);
-	DA_DEBUG_MTR(")\n");
+	DA_DEBUG_MTR(")\n\r");
 		
 	if (direction == LMU_FORWARD)
 		driver.SetVector(value, forwardRotation);

@@ -100,10 +100,11 @@ void da_mma8452q_sensor::Sample()
   ReadAccelData(sampleData);
   
   // Print out values
+  DA_DEBUG_SENSOR("accel:");
   for (int i = 0 ; i < 3 ; i++)
   {
 	  DA_DEBUG_SENSOR(sampleData[i]);  // Print g values
-	  DA_DEBUG_SENSOR("\t");  // tabs in between axes
+	  DA_DEBUG_SENSOR(",");  // tabs in between axes
   }
   DA_DEBUG_SENSOR("\n\r");
 

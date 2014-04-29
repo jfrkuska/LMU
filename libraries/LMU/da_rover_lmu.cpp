@@ -32,7 +32,7 @@ void da_rover_lmu::Travel(uint throttle, enum LMUMovement dir)
 	for (i = 0; i < wheelCount[i]; i++) { 
 		DA_DEBUG_MTR("Wheel Set:");
 		DA_DEBUG_MTR(i);
-		DA_DEBUG_MTR("\n");
+		DA_DEBUG_MTR("\n\r");
 
 		switch (dir) {
 		case LMU_FORWARD:
@@ -71,7 +71,7 @@ void da_rover_lmu::Init(void) {
 	
 	int i;
 	
-	DA_DEBUG_MTR("Rover Init\n");
+	DA_DEBUG_MTR("Rover Init\n\r");
 	
 	/* Init all feedback sensors */
 	for (i = 0; i < fbSensorCount; i++)
