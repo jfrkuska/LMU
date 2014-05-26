@@ -26,31 +26,34 @@
 #include "da_i2c_sensor.h"
 #include <Wire.h>
 
-void da_i2c_sensor::ReadRegisters(uchar addr, uint bytes, uchar *dest)
+int da_i2c_sensor::ReadRegisters(uchar addr, uint bytes, uchar *dest)
 {
+  unsigned long now = millis();
+  
   Wire.beginTransmission(bus_addr);
   Wire.write(addr);
   Wire.endTransmission(false);
 
   Wire.requestFrom(bus_addr, bytes); //Ask for bytes, once done, bus is released by default
 
-  while(Wire.available() < bytes); //Hang out until we get the # of bytes we expect
-
+  while(Wire.available() < bytes) { //Hang out until we get the # of bytes we expect
+	  if ((millis() - now) > TIMEOUT_MS) {
+		  Serial1.print("I2S Timed out while reading\r\n");
+		  return -E_TIMEOUT;
+	  }
+  }
+  
   for(uint x = 0; x < bytes; x++)
-    dest[x] = Wire.read();    
+    dest[x] = Wire.read();
+  
+  return 0;
 }
 
 byte da_i2c_sensor::ReadRegister(uchar addr)
 {
-  Wire.beginTransmission(bus_addr);
-  Wire.write(addr);
-  Wire.endTransmission(false); //endTransmission but keep the connection active
-
-  Wire.requestFrom(bus_addr, (uchar)1); //Ask for 1 byte, once done, bus is released by default
-
-  while(!Wire.available()) ; //Wait for the data to come back
-  
-  return Wire.read(); //Return this one byte
+  byte data = 0;
+  ReadRegisters(addr, 1, &data);
+  return data;
 }
 
 void da_i2c_sensor::WriteRegister(uchar addr, uchar data)

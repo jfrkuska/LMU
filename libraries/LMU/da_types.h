@@ -23,13 +23,15 @@
 #define da_types_h
 
 #if 1
-#define DA_DEBUG(X) (Serial.print(X))
-#define DA_DEBUG2(X,Y) (Serial.print(X,Y))
-#define DA_DEBUG_F(X,Y) (Serial.println(X,Y))
+#define DA_DEBUG(X) (Serial1.print(X))
+#define DA_DEBUG2(X,Y) (Serial1.print(X,Y))
+#define DA_DEBUG_F(X,Y) (Serial1.println(X,Y))
 #define da_debug
 #define da_debug_motor
 #define da_debug_sensor
 #endif
+
+#define E_TIMEOUT	1
 
 typedef unsigned char 	uchar;
 typedef unsigned int 	uint;

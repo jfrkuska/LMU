@@ -31,6 +31,10 @@ void da_wheel::setVector(uint value, enum LMUMovement dir) {
 	enum LMUMovement reverseRotation = 
 			forwardRotation == LMU_CW ? LMU_CCW : LMU_CW;
 	
+	/* do nothing if same */
+	if ((driver.GetThrottle() != value) || (driver.GetRotation() != dir))
+		return;
+	
 	DA_DEBUG_MTR("SetVector (");
 	DA_DEBUG_MTR2(value, HEX);
 	DA_DEBUG_MTR(", ");

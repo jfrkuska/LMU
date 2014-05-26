@@ -28,6 +28,8 @@
 #include "da_types.h"
 #include "da_sensor.h"
 #include "Arduino.h"
+
+#define TIMEOUT_MS	3000 /* 3 seconds */
  
 /******************************************************************************
  * Classes
@@ -37,7 +39,7 @@ private:
 	uchar bus_addr;						/* bus address */
 	uchar who_am_i;						/* id register address */
 protected:
-	void ReadRegisters(uchar addr, uint bytes, uchar *dest);
+	int ReadRegisters(uchar addr, uint bytes, uchar *dest);
 	byte ReadRegister(uchar addr);
 	void WriteRegister(uchar addr, uchar data);
 public:

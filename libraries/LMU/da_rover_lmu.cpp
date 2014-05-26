@@ -30,9 +30,9 @@ void da_rover_lmu::Travel(uint throttle, enum LMUMovement dir)
 	int i = min(wheelCount[LMU_ROVER_RIGHT], wheelCount[LMU_ROVER_LEFT]);
 	
 	for (i = 0; i < wheelCount[i]; i++) { 
-		DA_DEBUG_MTR("Wheel Set:");
-		DA_DEBUG_MTR(i);
-		DA_DEBUG_MTR("\n\r");
+//		DA_DEBUG_MTR("Wheel Set:");
+//		DA_DEBUG_MTR(i);
+//		DA_DEBUG_MTR("\n\r");
 
 		switch (dir) {
 		case LMU_FORWARD:
@@ -83,6 +83,10 @@ void da_rover_lmu::Init(void) {
 	for (i = 0; i < wheelCount[LMU_ROVER_RIGHT]; i++)
 			wheels[LMU_ROVER_RIGHT][i].Init();
 	
+	/* Init all switches */
+	for (i = 0; i < switchCount; i++)
+		switches[i].Init();	
+	
 	da_lmu::Init();
 }
 
@@ -95,10 +99,16 @@ void da_rover_lmu::ConfigureChassis(da_wheel *leftWheels, byte leftWheelCount,
 	  wheelCount[LMU_ROVER_RIGHT] = rightWheelCount;
 }
 
-void da_rover_lmu::ConfigureFBSensor(da_sensor *sensors, byte count)
+void da_rover_lmu::ConfigureFBSensors(da_sensor *sensors, byte count)
 {
 	fbSensors = sensors;
 	fbSensorCount = count; 
+}
+
+void da_rover_lmu::ConfigureSwitches(da_switch *switches, byte count)
+{
+	switches = switches;
+	switchCount = count; 
 }
 
 void da_rover_lmu::Update(void)

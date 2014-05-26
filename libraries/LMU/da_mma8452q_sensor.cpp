@@ -57,8 +57,7 @@ void da_mma8452q_sensor::Init()
   }
   else
   {
-    DA_DEBUG_SENSOR("Could not connect to MMA8452Q: 0x");
-    DA_DEBUG_SENSOR_F(c, HEX);
+    DA_DEBUG_SENSOR("Could not connect to MMA8452Q. Halting\r\n");
     while(1) ; // Loop forever if communication doesn't happen
   }
 
@@ -100,12 +99,12 @@ void da_mma8452q_sensor::Sample()
   ReadAccelData(sampleData);
   
   // Print out values
-  DA_DEBUG_SENSOR("accel:");
-  for (int i = 0 ; i < 3 ; i++)
-  {
-	  DA_DEBUG_SENSOR(sampleData[i]);  // Print g values
-	  DA_DEBUG_SENSOR(",");  // tabs in between axes
-  }
-  DA_DEBUG_SENSOR("\n\r");
+//  DA_DEBUG_SENSOR("accel:");
+//  for (int i = 0 ; i < 3 ; i++)
+//  {
+//	  DA_DEBUG_SENSOR(sampleData[i]);  // Print g values
+//	  DA_DEBUG_SENSOR(",");  // tabs in between axes
+//  }
+//  DA_DEBUG_SENSOR("\n\r");
 
 }

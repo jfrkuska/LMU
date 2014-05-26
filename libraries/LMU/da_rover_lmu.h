@@ -43,6 +43,8 @@ private:
   byte wheelCount[LMU_ROVER_SIDES];
   da_sensor *fbSensors;
   byte	fbSensorCount;
+  da_switch *switches;
+  byte	switchCount;
 public:
   da_rover_lmu(da_wheel *leftWheels = 0,
 		  byte leftWheelCount = 0,
@@ -64,7 +66,8 @@ public:
 		  byte leftWheelCount,
 		  da_wheel *rightWheels,
 		  byte rightWheelCount);
-  void ConfigureFBSensor(da_sensor *sensors, byte count);
+  void ConfigureFBSensors(da_sensor *sensors, byte count);
+  void ConfigureSwitches(da_switch *switches, byte count);
   void Update(void);
 };
 

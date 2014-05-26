@@ -58,7 +58,8 @@ void da_modbus_rover::Update(void)
 	regs[chassisIdx+5] = millis() - wdog;
 	
 	/* if no comm in TIMEOUT msec */
-	if ((regs[chassisIdx+5] - wdog) > timeout)  {
+	if ((timeout != 0) && (regs[chassisIdx+5] > timeout))  {
+		DA_DEBUG_MTR("Rover Comm timeout\r");
 	  /* handle timeout */
 	  /* halt motors */
 	  /* turn off switches */
@@ -68,13 +69,8 @@ void da_modbus_rover::Update(void)
 
 void da_modbus_rover::Init(void)
 {
-	ConfigureComm(MB_SLAVE, MB_BAUD, MB_PARITY, MB_TXENPIN);
+	mbs.configure(MB_SLAVE, baudrate, MB_PARITY, MB_TXENPIN);
 	da_rover_lmu::Init();
 	wdog = millis();
+	DA_DEBUG_MTR("Rover Initialized\r");
 }
-  
-void da_modbus_rover::ConfigureComm(uchar slave, uint baud, char parity, uchar pin) 
-{ 
-	mbs.configure(slave, baud, parity, pin); 
-}
-

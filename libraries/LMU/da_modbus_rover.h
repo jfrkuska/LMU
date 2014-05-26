@@ -46,6 +46,7 @@
 class da_modbus_rover: public da_rover_lmu {
 private:
 	int *regs;
+	long baudrate;
 	byte registerCount;
 	ModbusSlave mbs;
 	unsigned long wdog, timeout;         /* watchdog */
@@ -56,12 +57,14 @@ public:
 		  char motorIdx = INVALID_IDX,
 		  char sensorIdx = INVALID_IDX,
 		  char switchIdx = INVALID_IDX,
+		  long baudrate = MB_BAUD,
 		  uint timeout = MB_TIMEOUT):\
   da_rover_lmu(),
   regs(regs),
   registerCount(registerCount),
   mbs(),
   wdog(0),
+  baudrate(baudrate),
   chassisIdx(chassisIdx),
   motorIdx(motorIdx),
   sensorIdx(sensorIdx),
@@ -70,7 +73,7 @@ public:
   { }
 
   virtual void Init(void);
-  void ConfigureComm(uchar slave = MB_SLAVE, uint baud = MB_BAUD, char parity = MB_PARITY, uchar pin = MB_TXENPIN);
+  //void ConfigureComm(uchar slave, uint baud, char parity, uchar pin);
   void Update(void);
 };
 

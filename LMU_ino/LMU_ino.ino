@@ -1,8 +1,4 @@
 
-
-
-
-
 /*
  Copyright (C) 2013 Joshua Frkuska  DigitalArtisans.Org
 
@@ -29,6 +25,7 @@
 #include <da_l298_motor.h>
 #include <da_wheel.h>
 #include <da_mma8452q_sensor.h>
+#include <da_direct_switch.h>
 #include <da_modbus_rover.h>
 
 enum {        
@@ -43,17 +40,28 @@ enum {
   MB_CHASSIS_FB0,
   MB_CHASSIS_FB1,
   MB_CHASSIS_FB2,
+  MB_CHASSIS_FB3,
+  MB_CHASSIS_FB4,
   MB_CHASSIS_DELTA_TIME,
   MB_REGS   /* total number of registers on slave */
 };
 
 /* L298N Motor Driver Pins */
 #define M0_EN_PIN 10
-#define M0_P0_PIN 12
-#define M0_P1_PIN 13
+#define M0_P0_PIN 6
+#define M0_P1_PIN 5
 #define M1_EN_PIN 9
 #define M1_P0_PIN 8
-#define M1_P1_PIN 11
+#define M1_P1_PIN 16
+
+/* ULN2003 Driver Pins */
+#define S0_I1  16   /* shared with D16 */
+#define S0_I2  8    /* shared with D8 */
+#define S0_I3  15
+#define S0_I4  10
+#define S0_I5  17
+#define S0_I6  15   /* shared with INT1 */
+#define S0_I7  2    /* shared with RXI */
 
 int regs[MB_REGS] = {};
 
@@ -70,18 +78,25 @@ da_wheel wheels_left[] = {
   da_wheel(motorBL, 4.2, LMU_CCW),
 };
 
+da_direct_switch switches[] = {
+  da_direct_switch(S0_I6),
+};
+
 /* FIXME: idx assignment is still a hack */
-da_modbus_rover mbRover(regs, MB_REGS, MB_CHASSIS_FB0, MB_MTR_IDX, MB_SENSR_IDX);
+da_modbus_rover mbRover(regs, MB_REGS, MB_CHASSIS_FB0, MB_MTR_IDX, MB_SENSR_IDX, MB_SW_IDX, 115200, 0);
 
 void setup() 
 {
-  Serial.begin(57600);
   Wire.begin();
-  Serial.print("freeMemory()=");
-  Serial.println(freeMemory());
+  Serial1.begin(57600);
+  while (!Serial1) ;
+
+  Serial1.print("freeMemory()=");
+  Serial1.println(freeMemory());
   
   mbRover.ConfigureChassis(wheels_left, 1, wheels_right, 1);
-  mbRover.ConfigureFBSensor(&motion, 1);
+  mbRover.ConfigureFBSensors(&motion, 1);
+  //mbRover.ConfigureSwitches(switches, 1);
   mbRover.Init();
 }
 

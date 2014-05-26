@@ -28,7 +28,7 @@
 
 /* defaults chosen to provide stable low noise hi res output */
 #define MMA8452_DEF_GSEL	2		/* +/- 2g */
-#define MMA8452_DEF_ODR		400		/* 400 Hz */
+#define MMA8452_DEF_ODR		50		/* 50 Hz */
 #define MMA8453_DEF_POWERMODE	2	/* Hi Res */
 
 //MMA8452 registers
@@ -78,7 +78,7 @@ private:
 	void ReadAccelData(int *destination);
 	byte gsel, powermode;
 public:
-	da_mma8452q_sensor(int *sampleData, uint rate = MMA8452_MAX_RATE,
+	da_mma8452q_sensor(int *sampleData, uint rate = MMA8452_DEF_ODR,
 			byte slaveAddress = MMA8452_ADDRESS, byte gsel = MMA8452_DEF_GSEL,
 			byte powermode = MMA8453_DEF_POWERMODE):
 				sampleData(sampleData),
