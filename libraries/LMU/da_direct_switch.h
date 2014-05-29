@@ -41,8 +41,8 @@ public:
 	da_direct_switch(uchar pin, enum switch_state init_state = SW_OFF, uchar on_state = HIGH): 
 	da_switch(on_state), pin(pin) { pinMode(pin, OUTPUT); (init_state == SW_ON) ? on() : off(); }
 	enum switch_state getState(void) { return (digitalRead(pin) == getOnState()) ? SW_ON : SW_OFF; }
-	void setState(enum switch_state state) { state == SW_OFF ? off() : on(); }
-	void Init() {}
+	void setState(enum switch_state state) { DA_DEBUG_SWITCH("Switch Set\n\r"); state == SW_OFF ? off() : on(); }
+	void Init() { DA_DEBUG_SWITCH("Switch Initialized on pin="); DA_DEBUG_SWITCH(pin); DA_DEBUG_SWITCH("\n\r"); }
 	void Connect() {}
 	void Disconnect() {}
 	

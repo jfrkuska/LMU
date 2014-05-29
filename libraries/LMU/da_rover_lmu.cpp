@@ -30,10 +30,6 @@ void da_rover_lmu::Travel(uint throttle, enum LMUMovement dir)
 	int i = min(wheelCount[LMU_ROVER_RIGHT], wheelCount[LMU_ROVER_LEFT]);
 	
 	for (i = 0; i < wheelCount[i]; i++) { 
-//		DA_DEBUG_MTR("Wheel Set:");
-//		DA_DEBUG_MTR(i);
-//		DA_DEBUG_MTR("\n\r");
-
 		switch (dir) {
 		case LMU_FORWARD:
 		case LMU_BACKWARD:
@@ -54,7 +50,7 @@ void da_rover_lmu::Travel(uint throttle, enum LMUMovement dir)
 
 void da_rover_lmu::Calibrate(void)
 {
-	DA_DEBUG_MTR("Rover Calibrating\n");
+	DA_DEBUG_MTR("Rover Calibrating\n\r");
 
 	/* wait CALIBRATE_DELAY seconds */
 	
@@ -71,8 +67,6 @@ void da_rover_lmu::Init(void) {
 	
 	int i;
 	
-	DA_DEBUG_MTR("Rover Init\n\r");
-	
 	/* Init all feedback sensors */
 	for (i = 0; i < fbSensorCount; i++)
 		fbSensors[i].Init();
@@ -82,10 +76,6 @@ void da_rover_lmu::Init(void) {
 			wheels[LMU_ROVER_LEFT][i].Init();
 	for (i = 0; i < wheelCount[LMU_ROVER_RIGHT]; i++)
 			wheels[LMU_ROVER_RIGHT][i].Init();
-	
-	/* Init all switches */
-	for (i = 0; i < switchCount; i++)
-		switches[i].Init();	
 	
 	da_lmu::Init();
 }
@@ -99,16 +89,12 @@ void da_rover_lmu::ConfigureChassis(da_wheel *leftWheels, byte leftWheelCount,
 	  wheelCount[LMU_ROVER_RIGHT] = rightWheelCount;
 }
 
+
+/* this is a positional sensor for the rover */
 void da_rover_lmu::ConfigureFBSensors(da_sensor *sensors, byte count)
 {
 	fbSensors = sensors;
 	fbSensorCount = count; 
-}
-
-void da_rover_lmu::ConfigureSwitches(da_switch *switches, byte count)
-{
-	switches = switches;
-	switchCount = count; 
 }
 
 void da_rover_lmu::Update(void)

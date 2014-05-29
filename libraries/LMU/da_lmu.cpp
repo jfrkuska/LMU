@@ -25,6 +25,24 @@
 #include "Arduino.h"
 #include "da_lmu.h"
 
+void da_lmu::Init(void) {
+	
+	int i;
+	
+	/* Init all sensors */
+	for (i = 0; i < sensorCount; i++)
+		sensors[i].Init();
+	
+	/* Init all switches */
+	for (i = 0; i < switchCount; i++)
+		switches[i].Init();
+	
+	/* Init all motors */
+	for (i = 0; i < motorCount; i++)
+		motors[i].Init();
+
+}
+
 da_motor_driver* da_lmu::GetMotor(byte motorNum) 
 {
 	if (motors)

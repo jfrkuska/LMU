@@ -59,15 +59,15 @@ public:
   virtual void Travel(uint throttle, enum LMUMovement) = 0;
   virtual void Calibrate(void) = 0;
   
-  virtual void Init(void) { /* TODO call Init on all mtrs, sensrs, switches */ }
+  virtual void Init(void);
   virtual void Connect(void) { }
   virtual void Disconnect(void) { /* call all */ }
   class da_motor_driver* GetMotor(byte motorNum);
   class da_sensor* GetSensor(byte sensorNum);
   class da_switch* GetSwitch(byte switchNum);
-  void SetMotors(da_motor_driver *motors, byte mCount) { motors = motors; motorCount = mCount; }
-  void SetSensors(da_sensor *sensors, byte sCount) { sensors = sensors; sensorCount = sCount; }
-  void SetSwitches(da_switch *switches, byte wCount) { switches = switches; switchCount = wCount; }
+  void SetMotors(da_motor_driver *motorList, byte mCount) { motors = motorList; motorCount = mCount; }
+  void SetSensors(da_sensor *sensorList, byte sCount) { sensors = sensorList; sensorCount = sCount; }
+  void SetSwitches(da_switch *switchList, byte wCount) { switches = switchList; switchCount = wCount; }
   byte GetMotorCnt(void) { return motorCount; }
   byte GetSensorCnt(void) { return sensorCount; }
   byte GetSwitchCnt(void) { return switchCount; }

@@ -27,24 +27,7 @@
 #include <da_mma8452q_sensor.h>
 #include <da_direct_switch.h>
 #include <da_modbus_rover.h>
-
-enum {        
-  MB_MTR_IDX,        /* motor index to set */
-  MB_MTR_DIR,        /* BRAKE, CW, CCW */
-  MB_MTR_THROTTLE,   /* 0x0000 - 0xFFFF */
-  MB_SW_IDX,         /* switch index to set */
-  MB_SW_STATE,       /* switch state */
-  MB_SENSR_IDX,      /* sensor index to set */
-  MB_SENSR_REG,      /* sensor setting */
-  MB_SENSR_DATA,      /* sensor values */
-  MB_CHASSIS_FB0,
-  MB_CHASSIS_FB1,
-  MB_CHASSIS_FB2,
-  MB_CHASSIS_FB3,
-  MB_CHASSIS_FB4,
-  MB_CHASSIS_DELTA_TIME,
-  MB_REGS   /* total number of registers on slave */
-};
+#include <da_analog_sensor.h>
 
 /* L298N Motor Driver Pins */
 #define M0_EN_PIN 10
@@ -56,19 +39,19 @@ enum {
 
 /* ULN2003 Driver Pins */
 #define S0_I1  16   /* shared with D16 */
-#define S0_I2  8    /* shared with D8 */
-#define S0_I3  15
-#define S0_I4  10
-#define S0_I5  17
+#define S0_I2  8    /* shared with D8 */ /* borked */
+#define S0_I3  15  /* doesnt work */
+#define S0_I4  10  /* doesnt work */
+#define S0_I5  17  /* fix...doesnt work */
 #define S0_I6  15   /* shared with INT1 */
 #define S0_I7  2    /* shared with RXI */
 
-int regs[MB_REGS] = {};
+struct mb_rover rover_data;
 
 da_l298_motor motorFR(M0_EN_PIN, M0_P0_PIN, M0_P1_PIN, 0xFF);
 da_l298_motor motorBL(M1_EN_PIN, M1_P0_PIN, M1_P1_PIN, 0xFF);
 
-da_mma8452q_sensor motion(&regs[MB_CHASSIS_FB0]);
+da_mma8452q_sensor motion((int*)&rover_data.chassis.xyz);
 
 da_wheel wheels_right[] = {
   da_wheel(motorFR, 4.2, LMU_CW),
@@ -82,8 +65,9 @@ da_direct_switch switches[] = {
   da_direct_switch(S0_I6),
 };
 
-/* FIXME: idx assignment is still a hack */
-da_modbus_rover mbRover(regs, MB_REGS, MB_CHASSIS_FB0, MB_MTR_IDX, MB_SENSR_IDX, MB_SW_IDX, 115200, 0);
+da_analog_sensor battery(A6);
+
+da_modbus_rover mbRover(&rover_data, sizeof(rover_data)/sizeof(int), 115200, 0);
 
 void setup() 
 {
@@ -96,7 +80,8 @@ void setup()
   
   mbRover.ConfigureChassis(wheels_left, 1, wheels_right, 1);
   mbRover.ConfigureFBSensors(&motion, 1);
-  //mbRover.ConfigureSwitches(switches, 1);
+  mbRover.SetSwitches(switches, 1);
+  mbRover.SetSensors(&battery, 1);
   mbRover.Init();
 }
 

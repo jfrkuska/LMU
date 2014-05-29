@@ -29,6 +29,7 @@
 #define da_debug
 #define da_debug_motor
 #define da_debug_sensor
+#define da_debug_switch
 #endif
 
 #define E_TIMEOUT	1
@@ -43,21 +44,5 @@ enum LMUMovement {
 	LMU_CCW,
 	LMU_STOP
 };
-
-/* Name: enum TravelDirection
- * linear travel directions */
-// enum TravelDirection {
-	// LMU_FORWARD,
-	// LMU_REVERSE
-// };
-
-/* 
-* Name: enum RotationOrientation
-* This sets the way the motor turns in order to progress linearly forward */
-// enum RotationOrientation {
-	// LMU_CW,
-	// LMU_CCW,
-	// LMU_BRAKE,
-// };
 
 #endif

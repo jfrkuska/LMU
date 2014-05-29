@@ -49,6 +49,7 @@ public:
 	virtual void Calibrate(void) = 0;
 	virtual void SetRate(uint) = 0;
 	virtual void Sample(void) = 0;
+	virtual uint GetRawCount(void) = 0;
 	uint GetRate(void) { return rate; }
 };
 

@@ -25,20 +25,10 @@
 
 #include "da_analog_sensor.h"
 
-template<> void da_analog_sensor<uint>::Sample(void) {
-	for (uint i; i < value_count; i++) {
-		if (values)
-			values[i] = analogRead(pin); 
-		else
-			return;
-	}
+void da_analog_sensor::Sample(void) {
+	rawcount = analogRead(pin); 
 }
 
-template<> void da_analog_sensor<float>::Sample(void) {
-	for (uint i; i < value_count; i++) {
-		if (values)
-			values[0] = analogRead(pin) * conversion_rate;
-		else
-			return;
-	}
+uint da_analog_sensor::GetRawCount(void) { 
+	return rawcount;
 }

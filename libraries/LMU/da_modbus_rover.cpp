@@ -26,40 +26,50 @@
 
 void da_modbus_rover::Update(void)
 { 	
+	int index = 0;
 	/* update chassis */
-	Travel(regs[chassisIdx], (enum LMUMovement)regs[chassisIdx+1]);
+	Travel(rover->chassis.index, (enum LMUMovement)rover->chassis.direction);
 	
 	/* update feedback data */
 	da_rover_lmu::Update();
 	
 	/* main modbus loop*/
-	if(mbs.update(regs, registerCount)) {
+	if(mbs.update((int*)rover, registerCount)) {
 	
 		wdog = millis();
 	
 		/* update sensors */
-		if ((sensorIdx != INVALID_IDX) && regs[sensorIdx] < GetSensorCnt())
-			GetSensor(regs[sensorIdx])->Sample();
+		index = rover->sensor.index;
+		if (index < GetSensorCnt()) {
+			DA_DEBUG_MTR("Updating Sensor\r\n");
+			GetSensor(index)->Sample();
+			rover->sensor.data = GetSensor(index)->GetRawCount();
+		}
 		
 		/* update motor */
-		if ((motorIdx != INVALID_IDX) &&
-				(regs[motorIdx] < GetMotorCnt()) &&
-				(regs[motorIdx+2] != GetMotor(regs[motorIdx])->GetThrottle()))
-			GetMotor(regs[motorIdx])->SetVector((uint)regs[motorIdx+2], (enum LMUMovement)regs[motorIdx+1]);
-			 
+		index = rover->motor.index;
+		if ((index < GetMotorCnt()) &&
+				(rover->motor.throttle != GetMotor(index)->GetThrottle())) {
+			DA_DEBUG_MTR("Updating Throttle\r\n");
+			GetMotor(index)->SetVector((uint)rover->motor.throttle,
+					(enum LMUMovement)rover->motor.direction);
+		}
+		
 		/* update switch */
-		if ((switchIdx != INVALID_IDX) &&
-				(regs[switchIdx] < GetSwitchCnt()) &&
-				(regs[switchIdx+1] != GetSwitch(regs[switchIdx])->getState()))
-			GetSwitch(regs[switchIdx])->setState((enum switch_state)regs[switchIdx+1]);
+		index = rover->sw.index;
+		if ((index < GetSwitchCnt()) &&
+				(rover->sw.state != GetSwitch(index)->getState())) {
+			DA_DEBUG_MTR("Updating Switch\r\n");
+			GetSwitch(index)->setState((enum switch_state)rover->sw.state);
+		}
 	}	 
 	
 	/* update delta time */
-	regs[chassisIdx+5] = millis() - wdog;
+	rover->chassis.delta = millis() - wdog;
 	
 	/* if no comm in TIMEOUT msec */
-	if ((timeout != 0) && (regs[chassisIdx+5] > timeout))  {
-		DA_DEBUG_MTR("Rover Comm timeout\r");
+	if ((timeout != 0) && (rover->chassis.delta > timeout))  {
+		DA_DEBUG_MTR("Rover Comm timeout\r\n");
 	  /* handle timeout */
 	  /* halt motors */
 	  /* turn off switches */
@@ -72,5 +82,5 @@ void da_modbus_rover::Init(void)
 	mbs.configure(MB_SLAVE, baudrate, MB_PARITY, MB_TXENPIN);
 	da_rover_lmu::Init();
 	wdog = millis();
-	DA_DEBUG_MTR("Rover Initialized\r");
+	DA_DEBUG_MTR("Rover Initialized\r\n");
 }

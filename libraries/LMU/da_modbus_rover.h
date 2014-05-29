@@ -41,39 +41,92 @@
 /******************************************************************************
  * Classes
  ******************************************************************************/
- 
-/* FIXME: modbus rover _IS_A_ Modbus class */
+//enum {        
+//  MB_MTR_IDX,        /* motor index to set */
+//  MB_MTR_DIR,        /* BRAKE, CW, CCW */
+//  MB_MTR_THROTTLE,   /* 0x0000 - 0xFFFF */
+//  MB_SW_IDX,         /* switch index to set */
+//  MB_SW_STATE,       /* switch state */
+//  MB_SENSR_IDX,      /* sensor index to set */
+//  MB_SENSR_REG,      /* sensor setting */
+//  MB_SENSR_DATA,      /* sensor values */
+//  MB_CHASSIS_FB0,
+//  MB_CHASSIS_FB1,
+//  MB_CHASSIS_FB2,
+//  MB_CHASSIS_FB3,
+//  MB_CHASSIS_FB4,
+//  MB_CHASSIS_DELTA_TIME,
+//  MB_REGS   /* total number of registers on slave */
+//};
+
+/* everything is a 16 bit int as required by modbus */
+struct mb_motor {
+	int index;
+	int direction;
+	int throttle;
+};
+
+struct mb_switch {
+	int index;
+	int state;
+};
+
+struct mb_sensor {
+	int index;
+	int reg;
+	int data;
+};
+
+struct mb_chassis {
+	int index;
+	int direction;
+	struct fb_data xyz;
+	int delta;
+};
+
+struct mb_rover {
+	struct mb_motor motor;
+	struct mb_switch sw;
+	struct mb_sensor sensor;
+	struct mb_chassis chassis;
+};
+
+/* FIXME: modbus rover _IS_A_ Modbus class and _IS_A_ rover_lmu */
 class da_modbus_rover: public da_rover_lmu {
 private:
-	int *regs;
+//	int *regs;
+	struct mb_rover *rover;
 	long baudrate;
 	byte registerCount;
 	ModbusSlave mbs;
 	unsigned long wdog, timeout;         /* watchdog */
 	char chassisIdx, motorIdx, sensorIdx, switchIdx;
 public:
-  da_modbus_rover(int *regs, byte registerCount,
+	
+  da_modbus_rover(/*int *regs, *byte registerCount,
 		  char chassisIdx,
 		  char motorIdx = INVALID_IDX,
 		  char sensorIdx = INVALID_IDX,
-		  char switchIdx = INVALID_IDX,
+		  char switchIdx = INVALID_IDX,*/
+		  struct mb_rover *mb_rover,
+		  byte registerCount,
 		  long baudrate = MB_BAUD,
 		  uint timeout = MB_TIMEOUT):\
   da_rover_lmu(),
-  regs(regs),
+/*  regs(regs), */
   registerCount(registerCount),
+  rover(mb_rover),
   mbs(),
   wdog(0),
   baudrate(baudrate),
-  chassisIdx(chassisIdx),
+/*  chassisIdx(chassisIdx),
   motorIdx(motorIdx),
   sensorIdx(sensorIdx),
-  switchIdx(switchIdx),
+  switchIdx(switchIdx),*/
   timeout(timeout) 
   { }
 
   virtual void Init(void);
-  //void ConfigureComm(uchar slave, uint baud, char parity, uchar pin);
   void Update(void);
 };
 

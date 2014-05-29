@@ -33,26 +33,23 @@
  * Classes
  ******************************************************************************/
 
-template <class T>
 class da_analog_sensor: public da_sensor {
 private:
 protected:
-	T *values;
-	uint value_count;
-	uchar pin;
-	float conversion_rate;
+	uint rawcount;
+	byte pin;
 public:
-	da_analog_sensor(uchar pin, uint rate = 1, uint maxrate = 1, T *values = 0, uint count = 0): 
-	pin(pin), values(values), value_count(count), da_sensor(rate, maxrate) { }
+	da_analog_sensor(byte pin, uint rate = 1, uint maxrate = 1): 
+	pin(pin), rawcount(0), da_sensor(rate, maxrate) { }
 
 	virtual void Calibrate(void) { }
 	virtual void SetRate(uint) { }
 	
 	void Connect(void) { }
 	void Disconnect(void) { }
+	void Init(void) { DA_DEBUG_SENSOR("Sensor Initialized on pin="); DA_DEBUG_SENSOR(pin); DA_DEBUG_SENSOR("\n\r"); }
 	void Sample(void);
-	void SetConversionRate(float rate) { conversion_rate = rate; }
-	void SetDataContainer(T *dataptr, uint size) { values = dataptr; value_count = size; }
+	uint GetRawCount(void);
 };
 
 #endif

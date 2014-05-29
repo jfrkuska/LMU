@@ -94,6 +94,7 @@ public:
 	void Disconnect(void);
 	void Calibrate(void) {}
 	void SetRate(uint) {}
+	uint GetRawCount(void) { return 0; }
 	void Sample(void);
 };
 

@@ -34,6 +34,13 @@ enum LMURover {
 	LMU_ROVER_SIDES
 };
 
+/* TODO re-think this location */
+struct fb_data {
+	int x;
+	int y;
+	int z;
+};
+
 /******************************************************************************
  * Classes
  ******************************************************************************/
@@ -43,8 +50,6 @@ private:
   byte wheelCount[LMU_ROVER_SIDES];
   da_sensor *fbSensors;
   byte	fbSensorCount;
-  da_switch *switches;
-  byte	switchCount;
 public:
   da_rover_lmu(da_wheel *leftWheels = 0,
 		  byte leftWheelCount = 0,
@@ -55,8 +60,9 @@ public:
 		  da_sensor *sensors = 0,
 		  byte sCount = 0,
 		  da_motor_driver *motors = 0,
-		  byte mCount = 0):\ 
-		  da_lmu(switches, wCount, sensors, sCount, motors, mCount) {}
+		  byte mCount = 0):\
+		  da_lmu(switches, wCount, sensors, sCount, motors, mCount), 
+		  fbSensors(NULL), fbSensorCount(0) { wheelCount[0] = wheelCount[1] = 0; }
   
   virtual void Init(void);
   void Travel(uint throttle, enum LMUMovement);
@@ -67,7 +73,6 @@ public:
 		  da_wheel *rightWheels,
 		  byte rightWheelCount);
   void ConfigureFBSensors(da_sensor *sensors, byte count);
-  void ConfigureSwitches(da_switch *switches, byte count);
   void Update(void);
 };
 

@@ -29,6 +29,14 @@
 #include "da_types.h"
 #include "da_device.h"
  
+#ifdef da_debug_switch
+#define DA_DEBUG_SWITCH(X) (DA_DEBUG(X))
+#define DA_DEBUG_SWITCH_F(X,Y) DA_DEBUG_F(X,Y)
+#else
+#define DA_DEBUG_SWITCH(X)
+#define DA_DEBUG_SWITCH_F(X,Y)
+#endif
+
 enum switch_state {
 	SW_OFF = 0,
 	SW_ON = 1
