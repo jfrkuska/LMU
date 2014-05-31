@@ -49,7 +49,7 @@ class da_switch: public da_device {
 private:
 	uchar on_state;
 	virtual void on(void) = 0;
-	virtual void off(void) = 0;
+	virtual void off(void) = 0; 
 public:
 	da_switch(uchar on_state = SW_ON): on_state(on_state) { }
 	uchar getOnState(void) { return on_state; }

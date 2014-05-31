@@ -41,23 +41,6 @@
 /******************************************************************************
  * Classes
  ******************************************************************************/
-//enum {        
-//  MB_MTR_IDX,        /* motor index to set */
-//  MB_MTR_DIR,        /* BRAKE, CW, CCW */
-//  MB_MTR_THROTTLE,   /* 0x0000 - 0xFFFF */
-//  MB_SW_IDX,         /* switch index to set */
-//  MB_SW_STATE,       /* switch state */
-//  MB_SENSR_IDX,      /* sensor index to set */
-//  MB_SENSR_REG,      /* sensor setting */
-//  MB_SENSR_DATA,      /* sensor values */
-//  MB_CHASSIS_FB0,
-//  MB_CHASSIS_FB1,
-//  MB_CHASSIS_FB2,
-//  MB_CHASSIS_FB3,
-//  MB_CHASSIS_FB4,
-//  MB_CHASSIS_DELTA_TIME,
-//  MB_REGS   /* total number of registers on slave */
-//};
 
 /* everything is a 16 bit int as required by modbus */
 struct mb_motor {
@@ -78,7 +61,7 @@ struct mb_sensor {
 };
 
 struct mb_chassis {
-	int index;
+	int throttle;
 	int direction;
 	struct fb_data xyz;
 	int delta;
@@ -103,26 +86,17 @@ private:
 	char chassisIdx, motorIdx, sensorIdx, switchIdx;
 public:
 	
-  da_modbus_rover(/*int *regs, *byte registerCount,
-		  char chassisIdx,
-		  char motorIdx = INVALID_IDX,
-		  char sensorIdx = INVALID_IDX,
-		  char switchIdx = INVALID_IDX,*/
+  da_modbus_rover(
 		  struct mb_rover *mb_rover,
 		  byte registerCount,
 		  long baudrate = MB_BAUD,
 		  uint timeout = MB_TIMEOUT):\
   da_rover_lmu(),
-/*  regs(regs), */
   registerCount(registerCount),
   rover(mb_rover),
   mbs(),
   wdog(0),
   baudrate(baudrate),
-/*  chassisIdx(chassisIdx),
-  motorIdx(motorIdx),
-  sensorIdx(sensorIdx),
-  switchIdx(switchIdx),*/
   timeout(timeout) 
   { }
 

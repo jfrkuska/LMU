@@ -38,7 +38,7 @@ int da_i2c_sensor::ReadRegisters(uchar addr, uint bytes, uchar *dest)
 
   while(Wire.available() < bytes) { //Hang out until we get the # of bytes we expect
 	  if ((millis() - now) > TIMEOUT_MS) {
-		  Serial1.print("I2S Timed out while reading\r\n");
+		  Serial1.print("I2C Timed out while reading\r\n");
 		  return -E_TIMEOUT;
 	  }
   }

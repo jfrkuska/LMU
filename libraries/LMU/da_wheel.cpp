@@ -32,7 +32,7 @@ void da_wheel::setVector(uint value, enum LMUMovement dir) {
 			forwardRotation == LMU_CW ? LMU_CCW : LMU_CW;
 	
 	/* do nothing if same */
-	if ((driver.GetThrottle() != value) || (driver.GetRotation() != dir))
+	if ((driver.GetThrottle() == value))
 		return;
 	
 	DA_DEBUG_MTR("SetVector (");
@@ -41,9 +41,14 @@ void da_wheel::setVector(uint value, enum LMUMovement dir) {
 	DA_DEBUG_MTR2(dir, HEX);
 	DA_DEBUG_MTR(")\n\r");
 		
-	if (direction == LMU_FORWARD)
+	if (direction == LMU_FORWARD) {
+		DA_DEBUG_MTR("ROVER FWD\r\n");
 		driver.SetVector(value, forwardRotation);
-	else
+	} else if (direction == LMU_BACKWARD) {
+		DA_DEBUG_MTR("ROVER REV\r\n");
 		driver.SetVector(value, reverseRotation);
-
+	} else {
+		DA_DEBUG_MTR("ROVER CW/CCW\r\n");
+		driver.SetVector(value, dir);
+	}
 }

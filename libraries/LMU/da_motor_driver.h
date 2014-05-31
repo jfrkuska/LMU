@@ -56,8 +56,8 @@ public:
 	virtual void Disconnect(void) { }
 
 	/* trim should not be more than half the mask value */
-	void SetTrim(uint value) { trim = value & (throttleMask >> 1); }
-	uint GetTrim(void) { return trim; }
+	void SetTrim(int value) { trim = value; }
+	int GetTrim(void) { return trim; }
 	uint GetThrottle(void) { return throttle; }
 	enum LMUMovement GetRotation(void) { return spinOrientation; }
 };

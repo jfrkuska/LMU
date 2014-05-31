@@ -28,7 +28,7 @@ void da_modbus_rover::Update(void)
 { 	
 	int index = 0;
 	/* update chassis */
-	Travel(rover->chassis.index, (enum LMUMovement)rover->chassis.direction);
+	Travel((uint)rover->chassis.throttle, (enum LMUMovement)rover->chassis.direction);
 	
 	/* update feedback data */
 	da_rover_lmu::Update();
@@ -41,7 +41,7 @@ void da_modbus_rover::Update(void)
 		/* update sensors */
 		index = rover->sensor.index;
 		if (index < GetSensorCnt()) {
-			DA_DEBUG_MTR("Updating Sensor\r\n");
+			DA_DEBUG_SENSOR("Updating Sensor\r\n");
 			GetSensor(index)->Sample();
 			rover->sensor.data = GetSensor(index)->GetRawCount();
 		}
@@ -59,7 +59,7 @@ void da_modbus_rover::Update(void)
 		index = rover->sw.index;
 		if ((index < GetSwitchCnt()) &&
 				(rover->sw.state != GetSwitch(index)->getState())) {
-			DA_DEBUG_MTR("Updating Switch\r\n");
+			DA_DEBUG_SWITCH("Updating Switch\r\n");
 			GetSwitch(index)->setState((enum switch_state)rover->sw.state);
 		}
 	}	 
@@ -69,12 +69,11 @@ void da_modbus_rover::Update(void)
 	
 	/* if no comm in TIMEOUT msec */
 	if ((timeout != 0) && (rover->chassis.delta > timeout))  {
-		DA_DEBUG_MTR("Rover Comm timeout\r\n");
+		DA_DEBUG("Rover Comm timeout\r\n");
 	  /* handle timeout */
 	  /* halt motors */
 	  /* turn off switches */
 	}
-	   
 }
 
 void da_modbus_rover::Init(void)

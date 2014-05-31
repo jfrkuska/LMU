@@ -22,7 +22,7 @@
 #ifndef da_types_h
 #define da_types_h
 
-#if 1
+#if 0
 #define DA_DEBUG(X) (Serial1.print(X))
 #define DA_DEBUG2(X,Y) (Serial1.print(X,Y))
 #define DA_DEBUG_F(X,Y) (Serial1.println(X,Y))
@@ -30,6 +30,10 @@
 #define da_debug_motor
 #define da_debug_sensor
 #define da_debug_switch
+#else
+#define DA_DEBUG(X)
+#define DA_DEBUG2(X,Y)
+#define DA_DEBUG_F(X,Y)
 #endif
 
 #define E_TIMEOUT	1
@@ -38,11 +42,11 @@ typedef unsigned char 	uchar;
 typedef unsigned int 	uint;
 
 enum LMUMovement {
+	LMU_STOP,
 	LMU_FORWARD,
 	LMU_BACKWARD,
 	LMU_CW,
 	LMU_CCW,
-	LMU_STOP
 };
 
 #endif

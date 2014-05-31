@@ -31,22 +31,23 @@ void da_lmu::Init(void) {
 	
 	/* Init all sensors */
 	for (i = 0; i < sensorCount; i++)
-		sensors[i].Init();
+		sensors[i]->Init();
 	
 	/* Init all switches */
-	for (i = 0; i < switchCount; i++)
-		switches[i].Init();
+	for (i = 0; i < switchCount; i++) {
+		switches[i]->Init();
+	}
 	
 	/* Init all motors */
 	for (i = 0; i < motorCount; i++)
-		motors[i].Init();
+		motors[i]->Init();
 
 }
 
 da_motor_driver* da_lmu::GetMotor(byte motorNum) 
 {
 	if (motors)
-		return &motors[motorNum];
+		return motors[motorNum];
 	else
 		return NULL;
 }
@@ -54,7 +55,7 @@ da_motor_driver* da_lmu::GetMotor(byte motorNum)
 da_sensor* da_lmu::GetSensor(byte sensorNum)
 {
 	if (sensors)
-		return &sensors[sensorNum];
+		return sensors[sensorNum];
 	else
 		return NULL;
 }
@@ -62,7 +63,7 @@ da_sensor* da_lmu::GetSensor(byte sensorNum)
 da_switch* da_lmu::GetSwitch(byte switchNum) 
 {
 	if (switches)
-		return &switches[switchNum];
+		return switches[switchNum];
 	else
 		return NULL;
 }

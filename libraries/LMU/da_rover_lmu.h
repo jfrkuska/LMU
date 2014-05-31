@@ -55,11 +55,11 @@ public:
 		  byte leftWheelCount = 0,
 		  da_wheel *rightWheels = 0,
 		  byte rightWheelCount = 0,
-		  da_switch *switches = 0,
+		  da_switch **switches = 0,
 		  byte wCount = 0,
-		  da_sensor *sensors = 0,
+		  da_sensor **sensors = 0,
 		  byte sCount = 0,
-		  da_motor_driver *motors = 0,
+		  da_motor_driver **motors = 0,
 		  byte mCount = 0):\
 		  da_lmu(switches, wCount, sensors, sCount, motors, mCount), 
 		  fbSensors(NULL), fbSensorCount(0) { wheelCount[0] = wheelCount[1] = 0; }

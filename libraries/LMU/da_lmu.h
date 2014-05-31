@@ -35,18 +35,18 @@
  ******************************************************************************/
 class da_lmu: public da_device {
 private:
-  da_motor_driver *motors;
-  da_sensor *sensors;
-  da_switch *switches;
+  da_motor_driver **motors;
+  da_sensor **sensors;
+  da_switch **switches;
   byte motorCount;
   byte sensorCount;
   byte switchCount;
 public:
-  da_lmu(da_switch *switches = 0,
+  da_lmu(da_switch **switches = 0,
 		  byte wCount = 0,
-		  da_sensor *sensors = 0,
+		  da_sensor **sensors = 0,
 		  byte sCount = 0,
-		  da_motor_driver *motors = 0,
+		  da_motor_driver **motors = 0,
 		  byte mCount = 0):\
 		  motors(motors), 
 		  sensors(sensors),
@@ -65,9 +65,9 @@ public:
   class da_motor_driver* GetMotor(byte motorNum);
   class da_sensor* GetSensor(byte sensorNum);
   class da_switch* GetSwitch(byte switchNum);
-  void SetMotors(da_motor_driver *motorList, byte mCount) { motors = motorList; motorCount = mCount; }
-  void SetSensors(da_sensor *sensorList, byte sCount) { sensors = sensorList; sensorCount = sCount; }
-  void SetSwitches(da_switch *switchList, byte wCount) { switches = switchList; switchCount = wCount; }
+  void SetMotors(da_motor_driver **motorList, byte mCount) { motors = motorList; motorCount = mCount; }
+  void SetSensors(da_sensor **sensorList, byte sCount) { sensors = sensorList; sensorCount = sCount; }
+  void SetSwitches(da_switch **switchList, byte wCount) { switches = switchList; switchCount = wCount; }
   byte GetMotorCnt(void) { return motorCount; }
   byte GetSensorCnt(void) { return sensorCount; }
   byte GetSwitchCnt(void) { return switchCount; }

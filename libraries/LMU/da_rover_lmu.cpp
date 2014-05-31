@@ -44,6 +44,12 @@ void da_rover_lmu::Travel(uint throttle, enum LMUMovement dir)
 			wheels[LMU_ROVER_RIGHT][i].setVector(throttle, LMU_FORWARD);
 			wheels[LMU_ROVER_LEFT][i].setVector(throttle, LMU_BACKWARD);
 			break;
+		case LMU_STOP:
+			wheels[LMU_ROVER_RIGHT][i].setVector(0, LMU_FORWARD);
+			wheels[LMU_ROVER_LEFT][i].setVector(0, LMU_BACKWARD);
+			break;
+		default:
+			return;
 		}
 	}
 }
