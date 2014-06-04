@@ -19,8 +19,8 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef da_l298_motor_h
-#define da_l298_motor_h
+#ifndef da_l9110_motor_h
+#define da_l9110_motor_h
 
 /******************************************************************************
  * Includes
@@ -29,24 +29,18 @@
 #include "da_types.h"
 #include "da_motor_driver.h"
 
-class da_l298_motor: public da_motor_driver {
+class da_l9110_motor: public da_motor_driver {
 private:
-	byte enablePin;
 	byte pin0;
 	byte pin1;
 public:
-	da_l298_motor(
-		byte en, 
+	da_l9110_motor(
 		byte p0, 
 		byte p1,
-		uint mask = 0xFF): da_motor_driver(mask), enablePin(en), pin0(p0), pin1(p1) {
-			pinMode(enablePin, OUTPUT);
-			pinMode(pin0, OUTPUT);
-			pinMode(pin1, OUTPUT);
-	}
+		uint mask = 0xFF): da_motor_driver(mask), pin0(p0), pin1(p1) {}
 	
-	void On(void) { analogWrite(enablePin, throttle); }
-	void Off(void) { analogWrite(enablePin, 0); }
+	void On(void) {  }
+	void Off(void) { analogWrite(pin0, 0); analogWrite(pin1, 0); }
 	void SetVector(uint amount, enum LMUMovement movement);
 	void Init(void) { }
 };

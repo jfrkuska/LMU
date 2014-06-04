@@ -23,6 +23,7 @@
 
 
 #include <da_l298_motor.h>
+#include <da_l9110_motor.h>
 #include <da_wheel.h>
 #include <da_mma8452q_sensor.h>
 #include <da_direct_switch.h>
@@ -37,6 +38,12 @@
 #define M1_P0_PIN 8  /* shared with S0_I2 */
 #define M1_P1_PIN 16 /* shared with S0_I1 */
 
+/* L9110S Motor Driver Pins */
+#define M1_P0_PIN 9
+#define M1_P1_PIN 10
+#define M2_P0_PIN 5
+#define M2_P1_PIN 6
+
 /* ULN2003 Driver Pins */
 #define S0_I1  16   /* shared with D16 */
 #define S0_I2  8    /* shared with D8 */
@@ -48,8 +55,10 @@
 
 struct mb_rover rover_data;
 
-da_l298_motor motorFR(M0_EN_PIN, M0_P0_PIN, M0_P1_PIN, 0xFF);
-da_l298_motor motorBL(M1_EN_PIN, M1_P0_PIN, M1_P1_PIN, 0xFF);
+//da_l298_motor motorFR(M0_EN_PIN, M0_P0_PIN, M0_P1_PIN);
+//da_l298_motor motorBL(M1_EN_PIN, M1_P0_PIN, M1_P1_PIN);
+da_l9110_motor motorFR(M1_P0_PIN, M1_P1_PIN);
+da_l9110_motor motorBL(M2_P0_PIN, M2_P1_PIN);
 
 da_mma8452q_sensor motion((int*)&rover_data.chassis.xyz);
 
@@ -72,8 +81,8 @@ da_direct_switch switches[] = {
 };
 
 da_switch *switcharray[] = { 
-//  &switches[0], 
-//  &switches[1],
+  &switches[0], 
+  &switches[1],
   &switches[2],
   &switches[3],
   &switches[4],

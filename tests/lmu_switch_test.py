@@ -50,7 +50,7 @@ LMURegs = {'MTR_IDX':0,
 #log = logging.getLogger()
 #log.setLevel(logging.DEBUG)
 #devport = '/dev/ttyUSB0'
-devport = '/dev/ttyACM3'
+devport = '/dev/ttyACM0'
 client = ModbusClient(method='rtu', port=devport, parity='N', stopbits=1, bytesize=8, baudrate=115200, timeout=0.148, uid=1)
 
 client.connect()
