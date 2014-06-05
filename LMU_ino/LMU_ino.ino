@@ -117,7 +117,7 @@ void setup()
   
   mbRover.ConfigureChassis(wheels_left, 1, wheels_right, 1);
   mbRover.ConfigureFBSensors(&motion, 1);
-  mbRover.SetSwitches(switcharray, 5);
+  mbRover.SetSwitches(switcharray, 7);
   mbRover.SetSensors(sensorarray, 4);
   mbRover.Init();
 }
