@@ -1,0 +1,4 @@
+These test apps require the following python libraries
+-pymodbus
+-numpy
+-matplotlib

@@ -21,6 +21,50 @@
 #ifndef da_lmu_h
 #define da_lmu_h
 
+<<<<<<< HEAD
+#include "Arduino.h"
+
+typedef unsigned char uchar;
+
+/* 
+* Name: enum forward_orientation
+* This sets the way the motor turns in order to progress linearly forward */
+typedef enum forward_orientation {
+	CW,
+	CCW
+}orientation;
+
+/* this sets the motor to either move forward or backwards linearly
+ * from its current position */
+typedef enum travel_direction {
+	REVERSE=-1,
+	BRAKE=0,
+	FORWARD=1
+}travel;
+
+class da_motor {
+private:
+  orientation forward;			/* cw or ccw */
+  travel direction;			/* present rotation direction */
+  unsigned char throttle_present;       /* present motor throttle */
+  unsigned char throttle_max;		/* max motor throttle count */
+  static uchar tot_num_mtrs;		/* total motors derived from class */
+  unsigned char set_orientation(orientation rotation) { forward = rotation; }
+public:
+  da_motor(orientation fwd, uchar tmax): 
+  forward(fwd), throttle_max(tmax) { tot_num_mtrs++; }
+  virtual int setThrottle(uchar, travel) = 0;
+
+  unsigned char set_throttle(int value) { throttle_present = value & 0xFF; }
+  unsigned char get_throttle(void) { return throttle_present; }
+  orientation get_orientation(void) { return forward; }
+  travel get_direction(void) { return direction; }
+  void set_direction(travel new_dir) { direction = new_dir; }
+  static unsigned char get_mtr_cnt(void) { return tot_num_mtrs; }
+ };
+
+class da_dc_brushed: public da_motor {
+=======
 /******************************************************************************
  * Includes
  ******************************************************************************/
@@ -34,6 +78,7 @@
  * Classes
  ******************************************************************************/
 class da_lmu: public da_device {
+>>>>>>> development
 private:
   da_motor_driver **motors;
   da_sensor **sensors;

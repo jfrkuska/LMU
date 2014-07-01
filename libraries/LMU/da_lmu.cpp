@@ -22,39 +22,49 @@
 /******************************************************************************
  * Includes
  ******************************************************************************/
+#include "Arduino.h"
 #include "da_lmu.h"
 
-/******************************************************************************
- * User API
- ******************************************************************************/
-/* set dc-brushed mtr throttle (L298N Driver) */
-int da_dc_brushed::setThrottle(uchar amount, travel dir)
-{
-    orientation forward = get_orientation();
-    
-    if ((get_throttle() == amount) && (get_direction() == dir))
-		return 0;
-		    
-    digitalWrite(pin0, LOW);
-    digitalWrite(pin1, LOW);
-    
-    if (dir == BRAKE) {}
-    else if (dir == FORWARD) {
-        if (forward == CW)
-			digitalWrite(pin0, HIGH);
-        else 
-			digitalWrite(pin1, HIGH);
-    } else if (dir == REVERSE) {
-        if (forward == CW)
-          digitalWrite(pin1, HIGH);
-        else
-          digitalWrite(pin0, HIGH); 
-    } else return -1;
-    
-    set_direction(dir);    
-    set_throttle(amount);
+void da_lmu::Init(void) {
+	
+	int i;
+	
+	/* Init all sensors */
+	for (i = 0; i < sensorCount; i++)
+		sensors[i]->Init();
+	
+	/* Init all switches */
+	for (i = 0; i < switchCount; i++) {
+		switches[i]->Init();
+	}
+	
+	/* Init all motors */
+	for (i = 0; i < motorCount; i++)
+		motors[i]->Init();
 
-    analogWrite(enable_pin, amount);
-    
-    return 0;
 }
+
+da_motor_driver* da_lmu::GetMotor(byte motorNum) 
+{
+	if (motors)
+		return motors[motorNum];
+	else
+		return NULL;
+}
+
+da_sensor* da_lmu::GetSensor(byte sensorNum)
+{
+	if (sensors)
+		return sensors[sensorNum];
+	else
+		return NULL;
+}
+
+da_switch* da_lmu::GetSwitch(byte switchNum) 
+{
+	if (switches)
+		return switches[switchNum];
+	else
+		return NULL;
+}
+ 
